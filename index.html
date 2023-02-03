@@ -73,6 +73,116 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-【tr学习笔记】特殊效果（特效）" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2023/02/03/%E3%80%90tr%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91%E7%89%B9%E6%AE%8A%E6%95%88%E6%9E%9C%EF%BC%88%E7%89%B9%E6%95%88%EF%BC%89/" class="article-date">
+  <time class="dt-published" datetime="2023-02-03T07:30:25.000Z" itemprop="datePublished">2023-02-03</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2023/02/03/%E3%80%90tr%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91%E7%89%B9%E6%AE%8A%E6%95%88%E6%9E%9C%EF%BC%88%E7%89%B9%E6%95%88%EF%BC%89/">【tr学习笔记】特殊效果（特效）</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>这也是教程第一部分的末尾，前面的笔记我还没有补www</p>
+<h2 id="粒子特效"><a href="#粒子特效" class="headerlink" title="粒子特效"></a>粒子特效</h2><p>特效这方面，很显然很难使用某个贴图完成，所以我们引入 <strong>粒子系统</strong> 这个概念，它是 <strong>计算机图形学中模拟一些特定的模糊现象的技术</strong> ， 通俗一点说，它是用来模拟现实中一些抽象视觉效果的，比如烟、火、雾等等（稍微想想就能理解，使用粒子效果来表现这些画面会更有真实感）。而武器的特效，正好也适合用这种方式表现，TR中就带有实现这种效果的方式，较底层的实现方式暂且不深究（<del>计算机图形学的书还没看</del>），我们先学习如何使用这些泰拉瑞亚帮我们写好的粒子效果。</p>
+<p>首先要了解的是这个函数</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">override</span> <span class="keyword">void</span> <span class="title">MeleeEffects</span>(<span class="params">Player player, Rectangle hitbox</span>)</span>&#123;</span><br><span class="line">	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>MeleeEffects会在近战武器挥动的时候触发，第一个参数是玩家，第二个参数是物品挥动的时候的判定区域。如果要添加粒子特效，应该使用Dust.NewDustDirect这个函数</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Dust <span class="title">NewDustDirect</span>(<span class="params">Vector2 Position, <span class="built_in">int</span> Width, <span class="built_in">int</span> Height, <span class="built_in">int</span> Type, <span class="built_in">float</span> SpeedX = <span class="number">0</span>, <span class="built_in">float</span> SpeedY = <span class="number">0</span>, <span class="built_in">int</span> Alpha = <span class="number">0</span>, Color newColor = <span class="literal">default</span>, <span class="built_in">float</span> Scale = <span class="number">1</span></span>)</span>;</span><br></pre></td></tr></table></figure>
+
+<p>非常长的一个函数，接下来我们来了解一下这些参数</p>
+<table>
+<thead>
+<tr>
+<th align="left">参数</th>
+<th align="left">含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">Position</td>
+<td align="left">释放的初始位置</td>
+</tr>
+<tr>
+<td align="left">Width&#x2F;Height</td>
+<td align="left">粒子释放区域的宽&#x2F;高</td>
+</tr>
+<tr>
+<td align="left">Type</td>
+<td align="left">粒子的ID</td>
+</tr>
+<tr>
+<td align="left">SpeedX&#x2F;SpeedY</td>
+<td align="left">粒子速度的X&#x2F;Y分量</td>
+</tr>
+<tr>
+<td align="left">Alpha</td>
+<td align="left">粒子透明度</td>
+</tr>
+<tr>
+<td align="left">newColor</td>
+<td align="left">把粒子染成什么颜色</td>
+</tr>
+<tr>
+<td align="left">Scale</td>
+<td align="left">粒子的缩放倍数</td>
+</tr>
+</tbody></table>
+<p>具体的使用方法看实例</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">override</span> <span class="keyword">void</span> <span class="title">MeleeEffects</span>(<span class="params">Player player, Rectangle hitbox</span>)</span> &#123;</span><br><span class="line">    <span class="comment">// 在武器的挥动判定区域添加一些火焰粒子特效</span></span><br><span class="line">    Dust.NewDustDirect(hitbox.TopLeft(), hitbox.Width, hitbox.Height,</span><br><span class="line">        MyDustId.Fire, <span class="number">0</span>, <span class="number">0</span>, <span class="number">100</span>, Color.White, <span class="number">2f</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>而且这东西是有返回值的，也就是NewDustDirect生成的是一个Dust实例，Dust也有不少属性可以设置，可以灵活使用这些属性达到不同的效果。由于这个函数是在Dust类下而且不依赖外层函数传参，所以可以在其他函数使用，当成一个特效生成器就行了。</p>
+<h2 id="其他重写函数"><a href="#其他重写函数" class="headerlink" title="其他重写函数"></a>其他重写函数</h2><p>在ExampleMod中有这么个函数</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">override</span> Vector2? HoldoutOffset() &#123;</span><br><span class="line"><span class="keyword">return</span> <span class="keyword">new</span> Vector2(<span class="number">-10</span>,<span class="number">-5</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>我起初还以为这个是1.4的ExampleMod新加上去的，直到我在教程上看到了它。</p>
+<p>它可以返回一个偏移量，使武器持握的方式看起来更像那么回事，有了这个东西，<del>谁说我不能握着刀刃</del>。</p>
+<p>看到那个Vector2后面的问号没有，没错，它可以返回null值，返回null的话就是使用原版的偏移量，但是这样的话我为什么要用这个函数&#x3D;(</p>
+<p> <strong>但是</strong> ，这东西是有使用限制的，它只能在 <strong>useStyle为5且不是法杖的物品</strong> 上使用。不过好在我们不止这一个函数</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">override</span> Vector2? HoldoutOrigin() &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">base</span>.HoldoutOrigin();</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">override</span> <span class="keyword">void</span> <span class="title">HoldStyle</span>(<span class="params">Player player</span>)</span> &#123;</span><br><span class="line">    <span class="keyword">base</span>.HoldStyle(player);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这两个函数同样起作用，但可以看到第二个函数多了个参数，这几个函数还是需要区分一下的，不然的话写一个不就好了</p>
+<p>HoldoutOrigin只对useStyle是5且是法杖的物品起作用，能修改旋转中心的偏移量，<strong>注意是旋转中心</strong> ， Holdstyle是物品在使用中的时候会发生的事</p>
+<p>另外还有一个函数，HoldItemFrame，这个函数可以修改武器被选中的时候玩家的动作，需要返回true使改动生效。</p>
+<h3 id="ConsumeAmmo"><a href="#ConsumeAmmo" class="headerlink" title="ConsumeAmmo"></a>ConsumeAmmo</h3><p>这个函数是控制消耗弹药的重写函数，通过控制 <strong>返回值</strong> 来决定是否消耗弹药，true就是消耗弹药，false就是不消耗</p>
+<h4 id="random"><a href="#random" class="headerlink" title="random"></a>random</h4><p>这里需要额外介绍一下random，泰拉瑞亚原版就有Main.rand可供选择，当然如果自己写个伪随机没准也行，但是性能比不过人家还是别写了， <del>白嫖不香吗</del>。</p>
+<p>Main.rand.Next(&lt;范围&gt;)，这样就会生成一个不小于零且小于&lt;范围&gt;的随机整数。rand中还有一些方法，实际上，通过查找源码可知，rand是UnifiedRandom类型，也是泰拉瑞亚自定义的一个随机数类，随机数的发生几乎以Sample和InternalSample两个函数为核心，但对于具体实现了解即可，之后会专门研究随机数发生器的原理，之前有专门找过文章，等我把它看懂再说。</p>
+<p>rand类中除了Next还有几个方法也比较好用，而且Next方法也可以接受变参数，可以不接受参数，可以接受一个参数作为最大值，可以接受两个参数分别作为最小值和最大值，但需要注意的是它只返回int值。但要返回小数怎么办呢，我们需要使用 <strong>NextDouble</strong> 方法，但它就不接受参数了，而且它只能生成1以内的小数，扩展方法中的 <strong>NextBool</strong> 通过判断它与0.5的大小来生成bool值。另外，还有 <strong>Nextfloat</strong> ，它接受参数来界定最小值和最大值； <strong>Next&lt;T&gt;泛型</strong> 它接受一个T类型的数组，T可以是任意数据类型，然后返回随机一个数组元素。</p>
+<p>还有很多方法和扩展方法，可以随时通过vs <strong>转到定义</strong> 来了解。</p>
+<h3 id="shoot函数"><a href="#shoot函数" class="headerlink" title="shoot函数"></a>shoot函数</h3><p>shoot函数原型如下</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">override</span> <span class="built_in">bool</span> <span class="title">Shoot</span>(<span class="params">Player player, <span class="keyword">ref</span> Vector2 position, <span class="keyword">ref</span> <span class="built_in">float</span> speedX, <span class="keyword">ref</span> <span class="built_in">float</span> speedY, <span class="keyword">ref</span> <span class="built_in">int</span> type, <span class="keyword">ref</span> <span class="built_in">int</span> damage, <span class="keyword">ref</span> <span class="built_in">float</span> knockBack</span>)</span></span><br></pre></td></tr></table></figure>
+<p>有很多参数是带有ref修饰的，也就是说这些都是可以修改的值</p>
+<h3 id="useTime-及-useAnimation"><a href="#useTime-及-useAnimation" class="headerlink" title="useTime 及 useAnimation"></a>useTime 及 useAnimation</h3><p>这两个都是item的属性，如果把useTime改成useAnimation的1&#x2F;3，就会使这个武器三连发，另外还有一个属性是item.reuseDelay，是两次使用之间的间隔。</p>
+<h3 id="攻击敌人特效"><a href="#攻击敌人特效" class="headerlink" title="攻击敌人特效"></a>攻击敌人特效</h3><p>有两个重写函数，分别对应着砍到敌人后触发效果的OnHitNPC， 以及砍到敌人后，触发伤害前出发效果的ModifyHitNPC，后者的功能更加强大一些，因为它可以修改伤害、击退、暴击效果，另外，攻击到敌人后也可以通过对player操作来给玩家上点增益，因为函数有player参数。</p>
+<blockquote>
+<p>Written with <a target="_blank" rel="noopener" href="https://stackedit.cn/">StackEdit中文版</a>.</p>
+</blockquote>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ikklos.github.io/2023/02/03/%E3%80%90tr%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91%E7%89%B9%E6%AE%8A%E6%95%88%E6%9E%9C%EF%BC%88%E7%89%B9%E6%95%88%EF%BC%89/" data-id="cldo7jdgg00030cu11ujmdtqe" data-title="【tr学习笔记】特殊效果（特效）" class="article-share-link">分享</a>
+      
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
     <article id="post-【tr学习笔记】套装与buff" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
     <a href="/2023/02/01/%E3%80%90tr%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91%E5%A5%97%E8%A3%85%E4%B8%8Ebuff/" class="article-date">
@@ -227,7 +337,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ikklos.github.io/2023/02/01/%E3%80%90tr%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91%E5%A5%97%E8%A3%85%E4%B8%8Ebuff/" data-id="cldlifoac0003uwu1czhoghqn" data-title="【tr学习笔记】套装与buff" class="article-share-link">分享</a>
+      <a data-url="http://ikklos.github.io/2023/02/01/%E3%80%90tr%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91%E5%A5%97%E8%A3%85%E4%B8%8Ebuff/" data-id="cldo7jdgj00070cu1g64i6l1f" data-title="【tr学习笔记】套装与buff" class="article-share-link">分享</a>
       
       
       
@@ -323,7 +433,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ikklos.github.io/2023/02/01/%E3%80%90tr%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91%E9%A5%B0%E5%93%81%E5%92%8C%E7%BF%85%E8%86%80/" data-id="cldlifoaf0005uwu1213r8yu1" data-title="【tr学习笔记】饰品和翅膀" class="article-share-link">分享</a>
+      <a data-url="http://ikklos.github.io/2023/02/01/%E3%80%90tr%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91%E9%A5%B0%E5%93%81%E5%92%8C%E7%BF%85%E8%86%80/" data-id="cldo7jdgi00050cu1de5ob2ck" data-title="【tr学习笔记】饰品和翅膀" class="article-share-link">分享</a>
       
       
       
@@ -374,7 +484,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ikklos.github.io/2023/01/31/hello-world/" data-id="cldlifoa90001uwu16yqie2td" data-title="Hello World" class="article-share-link">分享</a>
+      <a data-url="http://ikklos.github.io/2023/01/31/hello-world/" data-id="cldo7jdgd00010cu1eelu9hez" data-title="Hello World" class="article-share-link">分享</a>
       
       
       
@@ -415,6 +525,10 @@
     <h3 class="widget-title">最新文章</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2023/02/03/%E3%80%90tr%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91%E7%89%B9%E6%AE%8A%E6%95%88%E6%9E%9C%EF%BC%88%E7%89%B9%E6%95%88%EF%BC%89/">【tr学习笔记】特殊效果（特效）</a>
+          </li>
         
           <li>
             <a href="/2023/02/01/%E3%80%90tr%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91%E5%A5%97%E8%A3%85%E4%B8%8Ebuff/">【tr学习笔记】套装与buff</a>
