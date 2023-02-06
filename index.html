@@ -73,6 +73,116 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-数据结构【二叉搜索树】C语言实现" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2023/02/06/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E3%80%90%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91%E3%80%91C%E8%AF%AD%E8%A8%80%E5%AE%9E%E7%8E%B0/" class="article-date">
+  <time class="dt-published" datetime="2023-02-06T09:43:34.000Z" itemprop="datePublished">2023-02-06</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2023/02/06/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E3%80%90%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91%E3%80%91C%E8%AF%AD%E8%A8%80%E5%AE%9E%E7%8E%B0/">数据结构【二叉搜索树】C语言实现</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="普普通通的二叉搜索树"><a href="#普普通通的二叉搜索树" class="headerlink" title="普普通通的二叉搜索树"></a>普普通通的二叉搜索树</h1><p>二叉搜索树，又叫二叉查找树，可以用来 <strong>降低很多问题的时间复杂度</strong> ，但是具体使用中通常通过各种优化以及变体，来扩大它能解决的问题范围，让它变得更加强大。这篇文章讨论最基础最简单的二叉搜索树。</p>
+<h2 id="二叉树"><a href="#二叉树" class="headerlink" title="二叉树"></a>二叉树</h2><p>首先了解一下什么是二叉树，其实根据“树”这个我们熟悉的事物就能大约推知一二，另外 <strong>二叉</strong> 可以理解为 <strong>二杈</strong> ，也就是两个树杈。如下图</p>
+<img src="/2023/02/06/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E3%80%90%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91%E3%80%91C%E8%AF%AD%E8%A8%80%E5%AE%9E%E7%8E%B0/treeExample.png" class="" title="treeExample">
+
+<p>图中，每一个圆圈我们称作 <strong>结点</strong> ，每一个箭头起始端连接的就是 <strong>父结点</strong> ，末端连接的就是 <strong>子结点</strong> 。最上面的一个我们叫它 <strong>根结点</strong> ， <strong>没有子节点</strong> 的就叫做 <strong>叶子结点</strong> ，非常形象而且贴合 <strong>树</strong> 这个概念。比较好理解的，但是上文提到过，<strong>二叉树</strong> 只有两个树杈，也就是说 <strong>每一个结点最多有两个子节点</strong> ，一般我们将它们称作 <strong>左儿子</strong> 和 <strong>右儿子</strong> ，那么以左儿子或右儿子为根结点的子树就叫 <strong>左子树</strong> 和 <strong>右子树</strong> 。当然也有其他的叫法，但缺乏几分趣味性。这说明二叉树是一种特殊的树（树也是一种数据结构，它是一种特殊的图）。那么这种数据结构有什么优势呢</p>
+<p>想像我们要从根节点出发，那么到达任何一个结点的路径长度就是我们走过的箭头的个数，在每一个结点，我们只需要选择是往左走还是往右走，在上面那个例子中，我们走到叶子结点的最长的路途也不过是三条线而已。但如果我们把这些结点都列到一个一维数组里面（ <del>排排队，排成一根棍</del> ），我们要从头走到尾，可就走得多了。从算法的角度分析，在一个结构合理的二叉树中，很多操作的时间复杂度会是O(logn)。</p>
+<h2 id="二叉搜索树"><a href="#二叉搜索树" class="headerlink" title="二叉搜索树"></a>二叉搜索树</h2><p>前一部分似乎废话有点多了，接下来我们进入正题， <strong>二叉搜索树</strong> 是二叉树中使用广泛的一种，它的性质如下</p>
+<ul>
+<li>它以二叉树的形式组织（是一种特殊的二叉树）</li>
+<li>对于每一个结点，它的左子树中的所有结点都小于它，右子树的所有结点都大于它（如果有的话）</li>
+</ul>
+<p>接下来我们给出一个例子</p>
+<img src="/2023/02/06/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E3%80%90%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91%E3%80%91C%E8%AF%AD%E8%A8%80%E5%AE%9E%E7%8E%B0/SearchExample.png" class="" title="SearchExample">
+
+<p>从根节点开始，若我们要找5，我们需要进行如下步骤</p>
+<ul>
+<li>跟7比较，比7小，往左走</li>
+<li>跟4比较，比4大，往右走</li>
+<li>跟5比较，相等，找到了</li>
+</ul>
+<p>简单地在脑海中演示这些步骤，你就能体会到它的优势。它不需要在所有数据中盲目地查找， <strong>如果搜索树结构合理</strong> ，它的很多操作复杂度都将是O(logn)，但请注意它会退化，关于这种情形在本篇末尾会讨论，并在之后进行优化。</p>
+<h3 id="存储方式"><a href="#存储方式" class="headerlink" title="存储方式"></a>存储方式</h3><p>主要的两种存储方式分为 <strong>链式存储</strong> 和 <strong>线性存储</strong> 。线性存储就是把它存储在一个一维的数组内，用下标来确认父子关系。</p>
+<table>
+<thead>
+<tr>
+<th align="left">8</th>
+<th align="left">4</th>
+<th align="left">10</th>
+<th align="left">1</th>
+<th align="left">6</th>
+<th align="left">-1</th>
+<th align="left">20</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">1</td>
+<td align="left">2</td>
+<td align="left">3</td>
+<td align="left">4</td>
+<td align="left">5</td>
+<td align="left">6</td>
+<td align="left">7</td>
+</tr>
+</tbody></table>
+<p>对于第n个结点（下标是n），下标是2*n的结点存储的就是它的左儿子，下标为2*n + 1 的结点存储的是他的右儿子，标为-1表示它没有左儿子或右儿子。这样写的优点是比较快，不是程序运行比较快，而是写得快，但建议在它不需要进行删除操作时使用这种存储方式，否则会很麻烦。接下来重点关注 <strong>链式存储</strong> （使用C语言完成此部分）</p>
+<h3 id="二叉搜索树的C语言实现"><a href="#二叉搜索树的C语言实现" class="headerlink" title="二叉搜索树的C语言实现"></a>二叉搜索树的C语言实现</h3><h4 id="一、直接上代码"><a href="#一、直接上代码" class="headerlink" title="一、直接上代码"></a>一、直接上代码</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> ISBIGGER(X,Y) ((X) &gt; (Y)) <span class="comment">//比较函数，为了提速设置成宏定义，可以根据具体实现自行修改,但注意一定是严格大于，不能设置为相等</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> SEARCH_BIGGER 1 <span class="comment">//Tree_search函数的控制值</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> SEARCH_SMALLER 0 <span class="comment">//Tree_search函数的控制值</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">//二叉树中结点的数据类型，可以随时更改</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="type">int</span> datatype;</span><br><span class="line"></span><br><span class="line"><span class="comment">//二叉树中的Node结构体定义</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">Node</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">	datatype value;</span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">Node</span> * <span class="title">pLeft</span>;</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">Node</span> * <span class="title">pRight</span>;</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">Node</span> * <span class="title">pParent</span>;</span></span><br><span class="line">&#125;Node, *PNode;</span><br><span class="line"></span><br><span class="line"><span class="comment">//二叉树SearchTree结构体定义</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">SearchTree</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">	PNode root;</span><br><span class="line">	PNode LeftEnd;</span><br><span class="line">	PNode RightEnd;</span><br><span class="line">&#125;SearchTree, *PSearchTree;</span><br><span class="line"></span><br><span class="line"><span class="comment">//创建一个空树，但不完全空，得传递一个根节点的值</span></span><br><span class="line">PSearchTree <span class="title function_">Set_Empty_Tree</span><span class="params">(datatype r)</span></span><br><span class="line">&#123;</span><br><span class="line">PSearchTree P = (PSearchTree)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(SearchTree));</span><br><span class="line">P-&gt;LeftEnd = <span class="literal">NULL</span>;</span><br><span class="line">P-&gt;RightEnd = <span class="literal">NULL</span>;</span><br><span class="line">P-&gt;root = (PNode)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(Node));</span><br><span class="line">P-&gt;root-&gt;pLeft = <span class="literal">NULL</span>;</span><br><span class="line">P-&gt;root-&gt;pRight = <span class="literal">NULL</span>;</span><br><span class="line">p-&gt;root-&gt;value = r;</span><br><span class="line">P-&gt;root-&gt;pParent = <span class="literal">NULL</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">return</span> P;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//插入一个元素，使用递归方法</span></span><br><span class="line">PNode <span class="title function_">Insert</span><span class="params">(PNode root,datatype target)</span></span><br><span class="line">&#123;</span><br><span class="line">    PNode p = <span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(Node));</span><br><span class="line">    p-&gt;pLeft = <span class="literal">NULL</span>;</span><br><span class="line">    p-&gt;pRight = <span class="literal">NULL</span>;</span><br><span class="line">    p-&gt;value = target;</span><br><span class="line">    <span class="keyword">if</span>(ISBIGGER(root-&gt;value,target))</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span>(root-&gt;pLeft == <span class="literal">NULL</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            root-&gt;pLeft = p;</span><br><span class="line">            p-&gt;pParent = root;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">        &#123;</span><br><span class="line">            Insert(root-&gt;pLeft,target);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(root-&gt;value == target)</span><br><span class="line">        &#123;</span><br><span class="line">	        <span class="built_in">free</span>(p);</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(root-&gt;pRight == <span class="literal">NULL</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            root-&gt;pRight = p;</span><br><span class="line">            p-&gt;pParent = root;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">        &#123;</span><br><span class="line">            Insert(root-&gt;pRight,target);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> root;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//创建一个树，它接受一个数组以及需要处理的元素个数</span></span><br><span class="line">PSearchTree <span class="title function_">Set_Tree</span><span class="params">(datatype <span class="built_in">array</span>[], <span class="type">int</span> num)</span></span><br><span class="line">&#123;</span><br><span class="line">    PSearchTree P = Set_Empty_Tree(<span class="built_in">array</span>[<span class="number">0</span>]);</span><br><span class="line">    <span class="type">int</span> i = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">if</span>(num &gt; <span class="number">0</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">for</span>(i = <span class="number">0</span>; i &lt; num; i++)</span><br><span class="line">        &#123;</span><br><span class="line">            Insert(P-&gt;root,<span class="built_in">array</span>[i]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">free</span>(P);</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> P;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//寻找一个元素，若没有找到则返回最接近的结点，可以通过第三个参数来控制是大于它还是小于它</span></span><br><span class="line">PNode <span class="title function_">Tree_Search</span><span class="params">(PNode root, datatype target, <span class="type">int</span> mode)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span>(root-&gt;value == target)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">return</span> root;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(ISBIGGER(root-&gt;value,target))</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">switch</span> (mode)</span><br><span class="line">            &#123;</span><br><span class="line">            <span class="keyword">case</span> SEARCH_BIGGER:</span><br><span class="line">                <span class="keyword">if</span>(root-&gt;pLeft == <span class="literal">NULL</span>)</span><br><span class="line">                &#123;</span><br><span class="line">                    <span class="keyword">return</span> root;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">else</span></span><br><span class="line">                &#123;</span><br><span class="line">                    Tree_Search(root-&gt;pLeft,target,mode);</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> SEARCH_SMALLER:</span><br><span class="line">                <span class="keyword">if</span>(root-&gt;pLeft == <span class="literal">NULL</span>)</span><br><span class="line">                &#123;</span><br><span class="line">                    <span class="keyword">if</span>(root-&gt;pParent-&gt;pRight != root)</span><br><span class="line">                    &#123;</span><br><span class="line">                        <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="keyword">else</span></span><br><span class="line">                    &#123;</span><br><span class="line">                        <span class="keyword">return</span> root-&gt;pParent;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">else</span></span><br><span class="line">                &#123;</span><br><span class="line">                    Tree_Search(root-&gt;pLeft,target,mode);</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">default</span>:</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">switch</span> (mode)</span><br><span class="line">            &#123;</span><br><span class="line">            <span class="keyword">case</span> SEARCH_BIGGER:</span><br><span class="line">                <span class="keyword">if</span>(root-&gt;pRight == <span class="literal">NULL</span>)</span><br><span class="line">                &#123;</span><br><span class="line">                    <span class="keyword">if</span>(root-&gt;pParent-&gt;pLeft != root)</span><br><span class="line">                    &#123;</span><br><span class="line">                        <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="keyword">else</span></span><br><span class="line">                    &#123;</span><br><span class="line">                        <span class="keyword">return</span> root-&gt;pParent;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;<span class="comment">//if</span></span><br><span class="line">                <span class="keyword">else</span></span><br><span class="line">                &#123;</span><br><span class="line">                    Tree_Search(root-&gt;pRight, target, mode);</span><br><span class="line">                &#125;<span class="comment">//else</span></span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> SEARCH_SMALLER:</span><br><span class="line">                <span class="keyword">if</span>(root-&gt;pRight == <span class="literal">NULL</span>)</span><br><span class="line">                &#123;</span><br><span class="line">                    <span class="keyword">return</span> root;</span><br><span class="line">                &#125;<span class="comment">//if</span></span><br><span class="line">                <span class="keyword">else</span></span><br><span class="line">                &#123;</span><br><span class="line">                    Tree_Search(root-&gt;pRight, target, mode);</span><br><span class="line">                &#125;<span class="comment">//else</span></span><br><span class="line">            <span class="keyword">default</span>:</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;<span class="comment">//switch</span></span><br><span class="line">        &#125;<span class="comment">//else</span></span><br><span class="line">    &#125;<span class="comment">//else</span></span><br><span class="line">&#125;<span class="comment">//Tree_Search</span></span><br></pre></td></tr></table></figure>
+
+<p>由此可见我写的代码又长又臭，尤其是Tree_Search函数，主要是因为想要实现一点花里胡哨的功能，所以接下来对核心的思想进行解读</p>
+<h4 id="二、算法解读"><a href="#二、算法解读" class="headerlink" title="二、算法解读"></a>二、算法解读</h4><p>首先是 <strong>插入元素</strong> ，我们想要插入元素的同时不破坏二叉搜索树的性质，只需要从根节点往下找，找到一个合适的位置插入即可。</p>
+<ul>
+<li>若当前位置与要插入值相等，则插入失败，返回NULL</li>
+<li>若插入值大于当前位置，则它应该属于右子树，往右儿子移动（如果有）</li>
+<li>若插入值小于当前位置，往左儿子移动（如果有）</li>
+<li>如果无法再移动，则此新元素成为当前结点的左儿子或右儿子，直接接入即可</li>
+</ul>
+<hr>
+<p><strong>查找元素</strong> ，跟插入元素的方法差不多，只不过这次不用插入，如果走到结尾还没有找到相同的元素，则此树中没有此元素，但是上面的代码中，我想要使它更智能地返回比它大或者小的结点，增加了很多判断条件，有一些弄巧成拙，但无所谓，正如西奥多·罗斯福说的”失败固然痛苦，但更糟糕的是从未去尝试“。（ <del>网上现查的，我的文学水平低的要死</del> ）</p>
+<hr>
+<p><strong>删除元素</strong> 这是这些操作中比较复杂的一个，也正是我不建议在需要删除元素的二叉搜索树上使用线性存储方法的原因。但在链式存储下则比较简单就可以实现这个操作。</p>
+<p>我们首先思考，如果删去根结点，如何保持这个二叉树性质不变。也就是说，左子树还是都小于根结点，右子树还是都大于根结点。</p>
+<p>如果我们随便从左子树的叶子结点上拿一个结点，把它放在根结点上，会发生什么事，如果左子树拿到的不是最大值，那在新的二叉树中，左子树就会有结点大于这个根节点，也就是说我们一定要拿左子树的最大值，或右子树的最小值。这刚好还是叶子结点，我们直接拿走就好，不用再对子树进行处理，得到这个最大值&#x2F;最小值的方式就是从子树的根结点一直往右走或者一直往左走。</p>
+<p>实现方式如下图</p>
+<img src="/2023/02/06/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E3%80%90%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91%E3%80%91C%E8%AF%AD%E8%A8%80%E5%AE%9E%E7%8E%B0/Delete.png" class="" title="Delete">
+
+
+<h3 id="退化"><a href="#退化" class="headerlink" title="退化"></a>退化</h3><p>上文也提到，这东西是会退化的，那么什么时候会退化呢，我们看下面这张图，它也是个二叉搜索树，但结构极其不合理</p>
+<img src="/2023/02/06/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E3%80%90%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91%E3%80%91C%E8%AF%AD%E8%A8%80%E5%AE%9E%E7%8E%B0/BadTree.png" class="" title="BadTree">
+
+<p>这样的二叉树倒不如直接存成一个一维数组算了，按顺序排列的话还能用二分法让它快一些，那么之后的文章会研究 <strong>平衡二叉搜索树</strong> 以及 <strong>红黑树</strong> ，能很大程度上避免这样的情况发生</p>
+<blockquote>
+<p>Written with <a target="_blank" rel="noopener" href="https://stackedit.cn/">StackEdit中文版</a>.</p>
+</blockquote>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ikklos.github.io/2023/02/06/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E3%80%90%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91%E3%80%91C%E8%AF%AD%E8%A8%80%E5%AE%9E%E7%8E%B0/" data-id="cldsmrjet0008r4u1blfl0a00" data-title="数据结构【二叉搜索树】C语言实现" class="article-share-link">分享</a>
+      
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
     <article id="post-【tr学习笔记】特殊效果（特效）" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
     <a href="/2023/02/03/%E3%80%90tr%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91%E7%89%B9%E6%AE%8A%E6%95%88%E6%9E%9C%EF%BC%88%E7%89%B9%E6%95%88%EF%BC%89/" class="article-date">
@@ -171,7 +281,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ikklos.github.io/2023/02/03/%E3%80%90tr%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91%E7%89%B9%E6%AE%8A%E6%95%88%E6%9E%9C%EF%BC%88%E7%89%B9%E6%95%88%EF%BC%89/" data-id="cldo7jdgg00030cu11ujmdtqe" data-title="【tr学习笔记】特殊效果（特效）" class="article-share-link">分享</a>
+      <a data-url="http://ikklos.github.io/2023/02/03/%E3%80%90tr%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91%E7%89%B9%E6%AE%8A%E6%95%88%E6%9E%9C%EF%BC%88%E7%89%B9%E6%95%88%EF%BC%89/" data-id="cldsmrjep0003r4u140w72i6j" data-title="【tr学习笔记】特殊效果（特效）" class="article-share-link">分享</a>
       
       
       
@@ -337,7 +447,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ikklos.github.io/2023/02/01/%E3%80%90tr%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91%E5%A5%97%E8%A3%85%E4%B8%8Ebuff/" data-id="cldo7jdgj00070cu1g64i6l1f" data-title="【tr学习笔记】套装与buff" class="article-share-link">分享</a>
+      <a data-url="http://ikklos.github.io/2023/02/01/%E3%80%90tr%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91%E5%A5%97%E8%A3%85%E4%B8%8Ebuff/" data-id="cldsmrjen0001r4u1fwvwcksi" data-title="【tr学习笔记】套装与buff" class="article-share-link">分享</a>
       
       
       
@@ -433,7 +543,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ikklos.github.io/2023/02/01/%E3%80%90tr%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91%E9%A5%B0%E5%93%81%E5%92%8C%E7%BF%85%E8%86%80/" data-id="cldo7jdgi00050cu1de5ob2ck" data-title="【tr学习笔记】饰品和翅膀" class="article-share-link">分享</a>
+      <a data-url="http://ikklos.github.io/2023/02/01/%E3%80%90tr%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91%E9%A5%B0%E5%93%81%E5%92%8C%E7%BF%85%E8%86%80/" data-id="cldsmrjer0005r4u1cwnvao79" data-title="【tr学习笔记】饰品和翅膀" class="article-share-link">分享</a>
       
       
       
@@ -484,7 +594,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://ikklos.github.io/2023/01/31/hello-world/" data-id="cldo7jdgd00010cu1eelu9hez" data-title="Hello World" class="article-share-link">分享</a>
+      <a data-url="http://ikklos.github.io/2023/01/31/hello-world/" data-id="cldsmrjes0007r4u10m1oevy7" data-title="Hello World" class="article-share-link">分享</a>
       
       
       
@@ -525,6 +635,10 @@
     <h3 class="widget-title">最新文章</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2023/02/06/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E3%80%90%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91%E3%80%91C%E8%AF%AD%E8%A8%80%E5%AE%9E%E7%8E%B0/">数据结构【二叉搜索树】C语言实现</a>
+          </li>
         
           <li>
             <a href="/2023/02/03/%E3%80%90tr%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91%E7%89%B9%E6%AE%8A%E6%95%88%E6%9E%9C%EF%BC%88%E7%89%B9%E6%95%88%EF%BC%89/">【tr学习笔记】特殊效果（特效）</a>
