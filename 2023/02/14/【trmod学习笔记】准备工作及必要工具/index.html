@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>【trmod学习笔记】准备工作及必要工具 | 爱斯基摩咸鱼历险记</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="前言没错，我们又从头开始了，从本篇开始我的mod学习主要依赖于tml官方网站的教程和资源而不是国内其他大佬的中文教程，从头开始的同时也补充一些前面的笔记。 语法准备开发泰拉瑞亚模组不需要太多的编程知识（至少他们是这么说的），但需要懂得C#的语法，官网内给出了一个学习网站   C# Syntax Tutorial ，只不过是全英文的，国内也有较为方便的网站比如 菜鸟教程 ，b站等等，但这些可能缺少一">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【trmod学习笔记】准备工作及必要工具">
+<meta property="og:url" content="http://ikklos.github.io/2023/02/14/%E3%80%90trmod%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91%E5%87%86%E5%A4%87%E5%B7%A5%E4%BD%9C%E5%8F%8A%E5%BF%85%E8%A6%81%E5%B7%A5%E5%85%B7/index.html">
+<meta property="og:site_name" content="爱斯基摩咸鱼历险记">
+<meta property="og:description" content="前言没错，我们又从头开始了，从本篇开始我的mod学习主要依赖于tml官方网站的教程和资源而不是国内其他大佬的中文教程，从头开始的同时也补充一些前面的笔记。 语法准备开发泰拉瑞亚模组不需要太多的编程知识（至少他们是这么说的），但需要懂得C#的语法，官网内给出了一个学习网站   C# Syntax Tutorial ，只不过是全英文的，国内也有较为方便的网站比如 菜鸟教程 ，b站等等，但这些可能缺少一">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-02-14T15:04:12.000Z">
+<meta property="article:modified_time" content="2023-02-14T15:04:31.022Z">
+<meta property="article:author" content="ikklo">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="爱斯基摩咸鱼历险记" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">爱斯基摩咸鱼历险记</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS 订阅"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="搜索"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://ikklos.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-【trmod学习笔记】准备工作及必要工具" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2023/02/14/%E3%80%90trmod%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91%E5%87%86%E5%A4%87%E5%B7%A5%E4%BD%9C%E5%8F%8A%E5%BF%85%E8%A6%81%E5%B7%A5%E5%85%B7/" class="article-date">
+  <time class="dt-published" datetime="2023-02-14T15:04:12.000Z" itemprop="datePublished">2023-02-14</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      【trmod学习笔记】准备工作及必要工具
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>没错，我们又从头开始了，从本篇开始我的mod学习主要依赖于tml官方网站的教程和资源而不是国内其他大佬的中文教程，从头开始的同时也补充一些前面的笔记。</p>
+<h2 id="语法准备"><a href="#语法准备" class="headerlink" title="语法准备"></a>语法准备</h2><p>开发泰拉瑞亚模组不需要太多的编程知识（至少他们是这么说的），但需要懂得C#的语法，官网内给出了一个学习网站   <a target="_blank" rel="noopener" href="https://www.tutorialspoint.com/csharp/csharp_basic_syntax.htm">C# Syntax Tutorial</a> ，只不过是全英文的，国内也有较为方便的网站比如 <a target="_blank" rel="noopener" href="https://www.runoob.com/">菜鸟教程</a> ，b站等等，但这些可能缺少一些C#的新特性补充，在前段时间的学习中我发现mod里用了一些C#的新特性，如果需要学习也可以选择购买书籍。</p>
+<h2 id="文本编辑器"><a href="#文本编辑器" class="headerlink" title="文本编辑器"></a>文本编辑器</h2><p>文本编辑器有很多，注意这些并不是IDE</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://notepad-plus-plus.org/">Notepad++</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.sublimetext.com/">Sublime Text</a></li>
+<li><a target="_blank" rel="noopener" href="http://www.vim.org/">Vim</a></li>
+<li><a target="_blank" rel="noopener" href="https://atom.io/">Atom</a></li>
+<li><a target="_blank" rel="noopener" href="https://code.visualstudio.com/">Visual Studio Code</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.gnu.org/software/emacs/">GNU Emacs (and its iterations)</a></li>
+</ul>
+<p>很明显我们只需要选择其中一个就足够了，我使用的是vscode但是似乎有时候这东西并没有Notepad++用起来顺手，还是看个人习惯。建议都试试。不过它们都比电脑自带的记事本功能更加强大。</p>
+<h2 id="IDE（集成开发环境）"><a href="#IDE（集成开发环境）" class="headerlink" title="IDE（集成开发环境）"></a>IDE（集成开发环境）</h2><p>比较方便的就是vs了，在组织项目上面它的功能更多也更强大，但正因为功能多，使用者可能会感到迷惑，一些莫名奇妙的标记也会让自己血压升高（ <del>它老觉得我代码写得难看</del> ）。但无疑我们需要这样一个集成开发环境，熟练使用之后可以让我们更快找到问题所在。</p>
+<h2 id="图形编辑工具（画图工具）"><a href="#图形编辑工具（画图工具）" class="headerlink" title="图形编辑工具（画图工具）"></a>图形编辑工具（画图工具）</h2><p>我们需要使用能够创作像素画的工具，这里我选择的是Aseprite，在steam上就可以买到，也可以去github找到开源版本自行编译安装，可惜过程过于繁琐我才懒得弄。</p>
+<hr>
+<p>以上，准备工作就基本完成，接下来就可以正式开始创作模组了。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ikklos.github.io/2023/02/14/%E3%80%90trmod%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91%E5%87%86%E5%A4%87%E5%B7%A5%E4%BD%9C%E5%8F%8A%E5%BF%85%E8%A6%81%E5%B7%A5%E5%85%B7/" data-id="cle4dl6yo0001p8u1b75o8y20" data-title="【trmod学习笔记】准备工作及必要工具" class="article-share-link">分享</a>
+      
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2023/02/06/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E3%80%90%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91%E3%80%91C%E8%AF%AD%E8%A8%80%E5%AE%9E%E7%8E%B0/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">后一篇</strong>
+      <div class="article-nav-title">数据结构【二叉搜索树】C语言实现</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/02/">二月 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/01/">一月 2023</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2023/02/14/%E3%80%90trmod%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91%E5%87%86%E5%A4%87%E5%B7%A5%E4%BD%9C%E5%8F%8A%E5%BF%85%E8%A6%81%E5%B7%A5%E5%85%B7/">【trmod学习笔记】准备工作及必要工具</a>
+          </li>
+        
+          <li>
+            <a href="/2023/02/06/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E3%80%90%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91%E3%80%91C%E8%AF%AD%E8%A8%80%E5%AE%9E%E7%8E%B0/">数据结构【二叉搜索树】C语言实现</a>
+          </li>
+        
+          <li>
+            <a href="/2023/02/03/%E3%80%90tr%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91%E7%89%B9%E6%AE%8A%E6%95%88%E6%9E%9C%EF%BC%88%E7%89%B9%E6%95%88%EF%BC%89/">【tr学习笔记】特殊效果（特效）</a>
+          </li>
+        
+          <li>
+            <a href="/2023/02/01/%E3%80%90tr%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91%E5%A5%97%E8%A3%85%E4%B8%8Ebuff/">【tr学习笔记】套装与buff</a>
+          </li>
+        
+          <li>
+            <a href="/2023/02/01/%E3%80%90tr%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91%E9%A5%B0%E5%93%81%E5%92%8C%E7%BF%85%E8%86%80/">【tr学习笔记】饰品和翅膀</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2023 ikklo<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.4.1.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>
