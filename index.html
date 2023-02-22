@@ -117,17 +117,17 @@
   </li>
         <li class="menu-item menu-item-tags">
 
-    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">4</span></a>
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">5</span></a>
 
   </li>
         <li class="menu-item menu-item-categories">
 
-    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">2</span></a>
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">3</span></a>
 
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">6</span></a>
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">7</span></a>
 
   </li>
   </ul>
@@ -153,6 +153,81 @@
 
           <div class="content index posts-expand">
             
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://ikklos.github.io/2023/02/23/C++%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/ikklo.jpg">
+      <meta itemprop="name" content="爱斯基摩咸鱼">
+      <meta itemprop="description" content="路漫漫其修远兮，吾将上下而求索">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="爱斯基摩咸鱼历险记">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2023/02/23/C++%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA/" class="post-title-link" itemprop="url">C++输入输出</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2023-02-23 02:27:20 / 修改时间：02:32:08" itemprop="dateCreated datePublished" datetime="2023-02-23T02:27:20+08:00">2023-02-23</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/C-%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">C++学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="输入流-amp-输出流"><a href="#输入流-amp-输出流" class="headerlink" title="输入流&amp;输出流"></a>输入流&amp;输出流</h2><h3 id="流"><a href="#流" class="headerlink" title="流"></a>流</h3><p>一个流就是一个字符序列，从外界接收输入就称作 <strong>输入流</strong> ，向外界输出就是 <strong>输出流</strong> ，<strong>流</strong> 的概念是一种 <strong>顺序</strong> 的概念，它通常表示数据是顺序输入或输出的</p>
+<h3 id="iostream库"><a href="#iostream库" class="headerlink" title="iostream库"></a>iostream库</h3><p>C++可以使用iostream库来控制流，它其中有两个基础类型，即<code>istream</code> 和 <code>ostream</code> 。对应着C语言中的标准输入输出函数，iostream库中有<code>cin</code>和<code>cout</code>对象，另外，还有 <code>cerr</code>  和 <code>clog</code> ，<code>cerr</code> 用来输出 <strong>警告和错误信息</strong> ，<code>clog</code>用于输出<strong>一般性信息</strong> ，可以用来写入日志文件。而在C语言中，其中的stderr和stdin，stdout则是使用文件指针的形式，可以看出C语言与C++的区别。</p>
+<h3 id="输入输出运算符-amp-操纵符"><a href="#输入输出运算符-amp-操纵符" class="headerlink" title="输入输出运算符&amp;操纵符"></a>输入输出运算符&amp;操纵符</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="type">int</span> main&#123;</span><br><span class="line">	std::cout &lt;&lt; <span class="string">&quot;Enter to two numbers:&quot;</span> &lt;&lt;std::endl;</span><br><span class="line">	<span class="type">int</span> v1 = <span class="number">0</span>, v2 = <span class="number">0</span>;</span><br><span class="line">	std::cin &gt;&gt; v1 &gt;&gt; v2;</span><br><span class="line">	std::cout &lt;&lt; <span class="string">&quot;The sum of&quot;</span> &lt;&lt; v1 &lt;&lt; <span class="string">&quot; and &quot;</span> &lt;&lt; v2</span><br><span class="line">			&lt;&lt; <span class="string">&quot; is &quot;</span> &lt;&lt; v1 + v2 &lt;&lt; endl;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>分析以上代码，我们会发现cin和cout的使用方式，与C语言的输入输出函数完全不同，而且它可以混合多种类型而无需指明数据类型。</p>
+<p>其中<code>std::cout</code> 前面的 <code>std::</code> 表示它在std命名空间下。</p>
+<p>在上面的代码中，我们见到了两种新的运算符 “&gt;&gt;”和“&lt;&lt;”它们分别是输入、输出运算符，运算符与表达式构成的仍然是表达式，也就有计算结果，以“&lt;&lt;”输出运算符为例，它的左侧只能是ostream类型， **计算结果** 是左侧的值， **副作用** 是将右侧的数据写入左侧的流中。那么<code>std::cout &lt;&lt; a &lt;&lt; b;</code> 计算顺序如下 <code>(std::cout &lt;&lt; a) &lt;&lt; b;</code> $\rightarrow$ <code>std::out &lt;&lt; b;</code> 当然这只是我们的分析顺序，具体的编译会将表达式进行处理。“&gt;&gt;”输入运算符也有相似的用法，它的左侧只能是istream类型。</p>
+<p>缓冲方式一般分为三种：无缓冲、行缓冲和全缓冲，在C语言中常见的输入函数scanf就是采用行缓冲。C语言中，对于缓冲区的约定是：遇到换行符<code>&#39;\n&#39;</code>以及遇到 <code>scanf()</code> 函数等需要输入的时候，或缓冲区已满时，自动将缓冲区的数据刷到设备上生成真正输出。当然C语言也有控制缓冲区的方式。现在我们只关心C++的常用输出方式，即cout，在cout中我们要使用一些操纵符来使输出流做出特定动作从而实现缓冲区的刷新以及将输出打印到屏幕上实现真正输出。</p>
+<p>上面的代码中，<code>endl</code> 是 <strong>操纵符</strong> ，它的作用是 <strong>结束当前行，然后将设备对应的缓冲区中的所有内容刷到设备上</strong> ，缓冲刷新操作是很常见的操作，用来保证一切数据不停留在缓冲区中，而是生成有效的输入输出。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
       
   
   
@@ -1039,20 +1114,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">6</span>
+          <span class="site-state-item-count">7</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-count">3</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-count">5</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
