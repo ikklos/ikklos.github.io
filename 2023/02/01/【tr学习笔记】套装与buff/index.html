@@ -20,12 +20,12 @@
     var CONFIG = {"hostname":"ikklos.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="套装贴图套装的贴图比较复杂，头部、腿部和身体的盔甲是分开的，而且需要绘制 帧图 。但看了1.4的examplemod之后我感觉这东西变得更加花里胡哨了。examplemod里面有一个时装，那个东西的下面有着一大堆贴图。 了解到这玩意有多么麻烦之后我决定在自己的mod里面少弄点套装  至于这东西究竟怎么画，群里面有一个教程，而且包里面有一个盔甲帧图生成器，用那个画比较现实，但是1.4又出幺蛾子，身体">
+  <meta name="description" content="套装 贴图 套装的贴图比较复杂，头部、腿部和身体的盔甲是分开的，而且需要绘制 帧图 。但看了1.4的examplemod之后我感觉这东西变得更加花里胡哨了。examplemod里面有一个时装，那个东西的下面有着一大堆贴图。 了解到这玩意有多么麻烦之后我决定在自己的mod里面少弄点套装 至于这东西究竟怎么画，群里面有一个教程，而且包里面有一个盔甲帧图生成器，用那个画比较现实，但是1.4又">
 <meta property="og:type" content="article">
 <meta property="og:title" content="【tr学习笔记】套装与buff">
 <meta property="og:url" content="http://ikklos.github.io/2023/02/01/%E3%80%90tr%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91%E5%A5%97%E8%A3%85%E4%B8%8Ebuff/index.html">
 <meta property="og:site_name" content="爱斯基摩咸鱼历险记">
-<meta property="og:description" content="套装贴图套装的贴图比较复杂，头部、腿部和身体的盔甲是分开的，而且需要绘制 帧图 。但看了1.4的examplemod之后我感觉这东西变得更加花里胡哨了。examplemod里面有一个时装，那个东西的下面有着一大堆贴图。 了解到这玩意有多么麻烦之后我决定在自己的mod里面少弄点套装  至于这东西究竟怎么画，群里面有一个教程，而且包里面有一个盔甲帧图生成器，用那个画比较现实，但是1.4又出幺蛾子，身体">
+<meta property="og:description" content="套装 贴图 套装的贴图比较复杂，头部、腿部和身体的盔甲是分开的，而且需要绘制 帧图 。但看了1.4的examplemod之后我感觉这东西变得更加花里胡哨了。examplemod里面有一个时装，那个东西的下面有着一大堆贴图。 了解到这玩意有多么麻烦之后我决定在自己的mod里面少弄点套装 至于这东西究竟怎么画，群里面有一个教程，而且包里面有一个盔甲帧图生成器，用那个画比较现实，但是1.4又">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://ikklos.github.io/2023/02/01/%E3%80%90tr%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91%E5%A5%97%E8%A3%85%E4%B8%8Ebuff/%E6%B5%81%E7%A8%8B%E5%9B%BE.png">
 <meta property="article:published_time" content="2023-02-01T10:08:37.000Z">
@@ -217,131 +217,169 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h2 id="套装"><a href="#套装" class="headerlink" title="套装"></a>套装</h2><h3 id="贴图"><a href="#贴图" class="headerlink" title="贴图"></a>贴图</h3><p>套装的贴图比较复杂，头部、腿部和身体的盔甲是分开的，而且需要绘制 <strong>帧图</strong> 。但看了1.4的examplemod之后我感觉这东西变得更加花里胡哨了。examplemod里面有一个时装，那个东西的下面有着一大堆贴图。 <del>了解到这玩意有多么麻烦之后我决定在自己的mod里面少弄点套装</del> </p>
-<p>至于这东西究竟怎么画，群里面有一个教程，而且包里面有一个盔甲帧图生成器，用那个画比较现实，但是1.4又出幺蛾子，身体部分的帧图并不像原来那样了，所以用生成器不能完全代工了，在此篇文章中暂且不作深究，先着眼于代码部分，对于贴图的研究过几天再说（</p>
-<h3 id="套装的代码部分"><a href="#套装的代码部分" class="headerlink" title="套装的代码部分"></a>套装的代码部分</h3><p>很多东西其实与饰品之类大差不差，但是依旧有一些区别。</p>
-<hr>
-<p>在上一部分讨论翅膀的代码时，我们见到了</p>
-<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[<span class="meta">AutoloadEquip(EquipType.XXX)</span>]</span><br></pre></td></tr></table></figure>
-
-<p>这样的代码，它给这个类附加了属性，是C#的一种语法，称为特性（Attribute）</p>
-<blockquote>
-<p><strong>特性</strong> 是用于在运行时传递程序中各种元素（比如类、方法、结构、枚举、组件等）的行为信息的声明性标签。您可以通过使用特性向程序添加声明性信息。一个声明性标签是通过放置在它所应用的元素前面的方括号（[ ]）来描述的。</p>
-</blockquote>
-<p>想要了解更多，请查看<a target="_blank" rel="noopener" href="https://www.runoob.com/csharp/csharp-attribute.html">C#特性</a> ，或者等一等我学完C#的语法（</p>
-<hr>
-<p>很明显，对于盔甲，我们也需要这么一行代码。其他的区别就是一些 <strong>重写函数</strong> ，<strong>UpdateEquip</strong> 就是其中一个，用于给套装添加效果。另外两个常用的是</p>
+        <h2 id="套装">套装</h2>
+<h3 id="贴图">贴图</h3>
+<p>套装的贴图比较复杂，头部、腿部和身体的盔甲是分开的，而且需要绘制
+<strong>帧图</strong>
+。但看了1.4的examplemod之后我感觉这东西变得更加花里胡哨了。examplemod里面有一个时装，那个东西的下面有着一大堆贴图。
+<del>了解到这玩意有多么麻烦之后我决定在自己的mod里面少弄点套装</del></p>
+<p>至于这东西究竟怎么画，群里面有一个教程，而且包里面有一个盔甲帧图生成器，用那个画比较现实，但是1.4又出幺蛾子，身体部分的帧图并不像原来那样了，所以用生成器不能完全代工了，在此篇文章中暂且不作深究，先着眼于代码部分，对于贴图的研究过几天再说（
+### 套装的代码部分
+很多东西其实与饰品之类大差不差，但是依旧有一些区别。</p>
+<table style="width:6%;">
+<colgroup>
+<col style="width: 5%" />
+</colgroup>
+<tbody>
+<tr class="odd">
+<td>在上一部分讨论翅膀的代码时，我们见到了</td>
+</tr>
+<tr class="even">
+<td><figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[<span class="meta">AutoloadEquip(EquipType.XXX)</span>]</span><br></pre></td></tr></table></figure></td>
+</tr>
+<tr class="odd">
+<td>这样的代码，它给这个类附加了属性，是C#的一种语法，称为特性（Attribute）
+&gt; <strong>特性</strong>
+是用于在运行时传递程序中各种元素（比如类、方法、结构、枚举、组件等）的行为信息的声明性标签。您可以通过使用特性向程序添加声明性信息。一个声明性标签是通过放置在它所应用的元素前面的方括号（[
+]）来描述的。</td>
+</tr>
+<tr class="even">
+<td>想要了解更多，请查看<a
+target="_blank" rel="noopener" href="https://www.runoob.com/csharp/csharp-attribute.html">C#特性</a>
+，或者等一等我学完C#的语法（</td>
+</tr>
+</tbody>
+</table>
+<p>很明显，对于盔甲，我们也需要这么一行代码。其他的区别就是一些
+<strong>重写函数</strong> ，<strong>UpdateEquip</strong>
+就是其中一个，用于给套装添加效果。另外两个常用的是</p>
 <ul>
-<li><strong>IsArmorSet</strong> - 用于判断玩家身上是否组成了一整套套装</li>
-<li><strong>UpdateArmorSet</strong> - 如果上面的函数判断成功，这个函数才会执行，其中只有一个Player参数，用于给玩家上点buff</li>
+<li><strong>IsArmorSet</strong> -
+用于判断玩家身上是否组成了一整套套装</li>
+<li><strong>UpdateArmorSet</strong> -
+如果上面的函数判断成功，这个函数才会执行，其中只有一个Player参数，用于给玩家上点buff</li>
 </ul>
 <p>接下来上实例（ <del>直接搬模板代码</del> ）</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">// IsArmorSet determines what armor pieces are needed for the setbonus to take effect</span><br><span class="line">// 一般来讲我们都是在Helmet这里面写这两个函数，所以并不用再判断是否穿上了头盔</span><br><span class="line">public override bool IsArmorSet(Item head, Item body, Item legs) &#123;</span><br><span class="line">	return body.type == ModContent.ItemType&lt;ExampleBreastplate&gt;() &amp;&amp; legs.type == ModContent.ItemType&lt;ExampleLeggings&gt;();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// UpdateArmorSet allows you to give set bonuses to the armor.</span><br><span class="line">public override void UpdateArmorSet(Player player) &#123;</span><br><span class="line">	player.setBonus = &quot;Increases dealt damage by 20%&quot;; // This is the setbonus tooltip</span><br><span class="line">	player.GetDamage(DamageClass.Generic) += 0.2f; // Increase dealt damage for all weapon classes by 20%</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>深入考虑一下这两个东西</p>
-<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//通过查找其他代码可知这两个东西应该是ModContent类中的方法</span></span><br><span class="line"><span class="comment">//但后面这个&lt;&gt;里面的东西是什么</span></span><br><span class="line">ModContent.ItemType&lt;ExampleBreastplate&gt;()</span><br><span class="line">ModContent.ItemType&lt;ExampleLeggings&gt;()</span><br><span class="line"><span class="comment">//通过翻找ModContent类我们可以看到它的定义</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="built_in">int</span> <span class="title">ItemType</span>&lt;<span class="title">T</span>&gt;() <span class="keyword">where</span> T : ModItem</span>&#123;</span><br><span class="line">	<span class="keyword">return</span> GetInstance&lt;T&gt;()?.Type ?? <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//以及这里面调用的另一个函数的定义</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> T <span class="title">GetInstance</span>&lt;<span class="title">T</span>&gt;() <span class="keyword">where</span> T : <span class="keyword">class</span></span>&#123;</span><br><span class="line">	<span class="keyword">return</span> ContentInstance&lt;T&gt;.Instance;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//继续找</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title">ContentInstance</span>&lt;<span class="title">T</span>&gt; <span class="keyword">where</span> <span class="title">T</span> : <span class="keyword">class</span>&#123;</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> T Instance &#123; <span class="keyword">get</span>; <span class="keyword">private</span> <span class="keyword">set</span>; &#125;</span><br><span class="line">	<span class="comment">//后面还有一些东西，但是上面的方法只用到了这个，所以我先省略后面的东西</span></span><br><span class="line">	<span class="comment">//目前看来只能深究到这里了，接下来分析一下找到的这些东西</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>接下来这些分析是我自己查找资料和其他人的博客得出的结论，是关于C#学习的一些东西，也就是说我是一边学C#一边学的mod，<del>一举两得了属于是</del> ，本来只是想学mod结果开启了C#的大门，看来C++的书要吃灰了。</p>
-<hr>
-<h3 id="代码分析以及C-学习"><a href="#代码分析以及C-学习" class="headerlink" title="代码分析以及C#学习"></a>代码分析以及C#学习</h3><hr>
-<h4 id="一、泛型"><a href="#一、泛型" class="headerlink" title="一、泛型"></a>一、泛型</h4><p>着眼于上面的代码，从下往上分析，这个 <strong>T</strong> 可以看作一个 <strong>占位符</strong> ，在C#中这个用法称为 <strong>泛型</strong> ，之后在真正使用时可以把占位符的位置换成具体的数据类型，包括但不限于int、char之类，甚至可以把自己的类放在里面，并且可以加上 <strong>约束</strong></p>
+<p>深入考虑一下这两个东西 <figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//通过查找其他代码可知这两个东西应该是ModContent类中的方法</span></span><br><span class="line"><span class="comment">//但后面这个&lt;&gt;里面的东西是什么</span></span><br><span class="line">ModContent.ItemType&lt;ExampleBreastplate&gt;()</span><br><span class="line">ModContent.ItemType&lt;ExampleLeggings&gt;()</span><br><span class="line"><span class="comment">//通过翻找ModContent类我们可以看到它的定义</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="built_in">int</span> <span class="title">ItemType</span>&lt;<span class="title">T</span>&gt;() <span class="keyword">where</span> T : ModItem</span>&#123;</span><br><span class="line">	<span class="keyword">return</span> GetInstance&lt;T&gt;()?.Type ?? <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//以及这里面调用的另一个函数的定义</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> T <span class="title">GetInstance</span>&lt;<span class="title">T</span>&gt;() <span class="keyword">where</span> T : <span class="keyword">class</span></span>&#123;</span><br><span class="line">	<span class="keyword">return</span> ContentInstance&lt;T&gt;.Instance;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//继续找</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title">ContentInstance</span>&lt;<span class="title">T</span>&gt; <span class="keyword">where</span> <span class="title">T</span> : <span class="keyword">class</span>&#123;</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> T Instance &#123; <span class="keyword">get</span>; <span class="keyword">private</span> <span class="keyword">set</span>; &#125;</span><br><span class="line">	<span class="comment">//后面还有一些东西，但是上面的方法只用到了这个，所以我先省略后面的东西</span></span><br><span class="line">	<span class="comment">//目前看来只能深究到这里了，接下来分析一下找到的这些东西</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>接下来这些分析是我自己查找资料和其他人的博客得出的结论，是关于C#学习的一些东西，也就是说我是一边学C#一边学的mod，<del>一举两得了属于是</del>
+，本来只是想学mod结果开启了C#的大门，看来C++的书要吃灰了。</p>
+<h4 id="一泛型">一、泛型</h4>
+<p>着眼于上面的代码，从下往上分析，这个 <strong>T</strong> 可以看作一个
+<strong>占位符</strong> ，在C#中这个用法称为 <strong>泛型</strong>
+，之后在真正使用时可以把占位符的位置换成具体的数据类型，包括但不限于int、char之类，甚至可以把自己的类放在里面，并且可以加上
+<strong>约束</strong></p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">where T: &lt;一些约束&gt;</span><br></pre></td></tr></table></figure>
-
 <p>这些约束一共有6种：</p>
 <table>
 <thead>
-<tr>
-<th align="left">限定效果</th>
-<th align="left">限定方式</th>
+<tr class="header">
+<th style="text-align: left;">限定效果</th>
+<th style="text-align: left;">限定方式</th>
 </tr>
 </thead>
-<tbody><tr>
-<td align="left">值类型</td>
-<td align="left">where 泛型字母: struct</td>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">值类型</td>
+<td style="text-align: left;">where 泛型字母: struct</td>
 </tr>
-<tr>
-<td align="left">引用类型</td>
-<td align="left">where 泛型字母: class</td>
+<tr class="even">
+<td style="text-align: left;">引用类型</td>
+<td style="text-align: left;">where 泛型字母: class</td>
 </tr>
-<tr>
-<td align="left">存在无参公共构造函数</td>
-<td align="left">where 泛型字母: new()</td>
+<tr class="odd">
+<td style="text-align: left;">存在无参公共构造函数</td>
+<td style="text-align: left;">where 泛型字母: new()</td>
 </tr>
-<tr>
-<td align="left">某个类本身或者派生类</td>
-<td align="left">where 泛型字母: 类名</td>
+<tr class="even">
+<td style="text-align: left;">某个类本身或者派生类</td>
+<td style="text-align: left;">where 泛型字母: 类名</td>
 </tr>
-<tr>
-<td align="left">某个接口的派生类型</td>
-<td align="left">where 泛型字母: 接口名</td>
+<tr class="odd">
+<td style="text-align: left;">某个接口的派生类型</td>
+<td style="text-align: left;">where 泛型字母: 接口名</td>
 </tr>
-<tr>
-<td align="left">另一个泛型本身或派生类型</td>
-<td align="left">where 泛型字母: 另一个泛型字母</td>
+<tr class="even">
+<td style="text-align: left;">另一个泛型本身或派生类型</td>
+<td style="text-align: left;">where 泛型字母: 另一个泛型字母</td>
 </tr>
-</tbody></table>
-<h4 id="二、类的属性以及get，set关键字等"><a href="#二、类的属性以及get，set关键字等" class="headerlink" title="二、类的属性以及get，set关键字等"></a>二、类的属性以及get，set关键字等</h4><p>依旧着眼于代码的最后一段</p>
+</tbody>
+</table>
+<h4
+id="二类的属性以及getset关键字等">二、类的属性以及get，set关键字等</h4>
+<p>依旧着眼于代码的最后一段</p>
 <figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title">ContentInstance</span>&lt;<span class="title">T</span>&gt; <span class="keyword">where</span> <span class="title">T</span> : <span class="keyword">class</span>&#123;</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> T Instance &#123; <span class="keyword">get</span>; <span class="keyword">private</span> <span class="keyword">set</span>; &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p> <em>Instance</em> 是一个公共属性，get表示它是一个公共读属性，也称为访问器，可以理解为在外部可以轻易读取内部字段的值，private set 是为了保护数据，不能在外部赋值，这种定义方法表示它是 <strong>抽象属性</strong></p>
-<h4 id="三、问号的更多用法"><a href="#三、问号的更多用法" class="headerlink" title="三、问号的更多用法"></a>三、问号的更多用法</h4><p><strong>?.一个问号加一个点</strong> ，这个符号在C#中较为官方的名称是 <strong>空条件运算符</strong>  ，它的含义是 “ <strong>评估第一个操作数；如果为空，则停止，结果为空。否则，评估第二个操作数（作为第一个操作数的成员访问）</strong> ” 。 </p>
+<p><em>Instance</em>
+是一个公共属性，get表示它是一个公共读属性，也称为访问器，可以理解为在外部可以轻易读取内部字段的值，private
+set 是为了保护数据，不能在外部赋值，这种定义方法表示它是
+<strong>抽象属性</strong></p>
+<h4 id="三问号的更多用法">三、问号的更多用法</h4>
+<p><strong>?.一个问号加一个点</strong> ，这个符号在C#中较为官方的名称是
+<strong>空条件运算符</strong> ，它的含义是 “
+<strong>评估第一个操作数；如果为空，则停止，结果为空。否则，评估第二个操作数（作为第一个操作数的成员访问）</strong>
+” 。</p>
 <p><strong>??两个问号连用</strong> ，例子如下</p>
 <figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">string</span> str1 = <span class="literal">null</span>;</span><br><span class="line"><span class="built_in">string</span> str2 = str1 ??<span class="string">&quot;&quot;</span>;</span><br></pre></td></tr></table></figure>
-
-<p>上面的例子会 <strong>自动判断str1是否为null</strong> ，如果不是null，则将str1的值赋给str2，否则赋值空字符串。</p>
+<p>上面的例子会 <strong>自动判断str1是否为null</strong>
+，如果不是null，则将str1的值赋给str2，否则赋值空字符串。</p>
 <p><strong>?单问号</strong> ，实现基本数据类型也可以赋值为null</p>
 <figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">int</span>? i = <span class="literal">null</span>;</span><br></pre></td></tr></table></figure>
-
 <p>如果去掉那个问号则会报错</p>
-<p><strong>?:问号与冒号组合使用</strong> ，是三元运算符，可以简化判断语句，在C语言的学习中太过熟悉，不多赘述。</p>
-<p>以上的部分用法在以下代码中有所体现</p>
-<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="built_in">int</span> <span class="title">ItemType</span>&lt;<span class="title">T</span>&gt;() <span class="keyword">where</span> T : ModItem</span>&#123;</span><br><span class="line">	<span class="keyword">return</span> GetInstance&lt;T&gt;()?.Type ?? <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h4 id="四、汇总分析"><a href="#四、汇总分析" class="headerlink" title="四、汇总分析"></a>四、汇总分析</h4><figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//这两个东西很明显是泛型方法</span></span><br><span class="line"><span class="comment">//&lt;&gt;里面的东西就是具体的数据类型</span></span><br><span class="line"><span class="comment">//这里的数据类型是类，也就是我们的胸甲和腿甲</span></span><br><span class="line">ModContent.ItemType&lt;ExampleBreastplate&gt;()</span><br><span class="line">ModContent.ItemType&lt;ExampleLeggings&gt;()</span><br><span class="line"><span class="comment">//通过翻找ModContent类我们可以看到ItemType的定义</span></span><br><span class="line"><span class="comment">//这个泛型方法后面的where一串就是上面所说的泛型约束</span></span><br><span class="line"><span class="comment">//而这个后面的Type则是ModItem的属性，在其中的定义如下</span></span><br><span class="line"><span class="comment">//public int Type =&gt; Item.type;</span></span><br><span class="line"><span class="comment">//是一个只读属性，这里面的=&gt;也是一个新用法，之后再深入研究，简化了get关键字</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="built_in">int</span> <span class="title">ItemType</span>&lt;<span class="title">T</span>&gt;() <span class="keyword">where</span> T : ModItem</span>&#123;</span><br><span class="line">	<span class="keyword">return</span> GetInstance&lt;T&gt;()?.Type ?? <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//以及这里面调用的另一个函数的定义</span></span><br><span class="line"><span class="comment">//返回Instance这个属性的值</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> T <span class="title">GetInstance</span>&lt;<span class="title">T</span>&gt;() <span class="keyword">where</span> T : <span class="keyword">class</span></span>&#123;</span><br><span class="line">	<span class="keyword">return</span> ContentInstance&lt;T&gt;.Instance;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//Instance的定义在这里</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title">ContentInstance</span>&lt;<span class="title">T</span>&gt; <span class="keyword">where</span> <span class="title">T</span> : <span class="keyword">class</span>&#123;</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> T Instance &#123; <span class="keyword">get</span>; <span class="keyword">private</span> <span class="keyword">set</span>; &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>画出流程图应该是这样的</p>
-<img src="/2023/02/01/%E3%80%90tr%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91%E5%A5%97%E8%A3%85%E4%B8%8Ebuff/%E6%B5%81%E7%A8%8B%E5%9B%BE.png" class="" title="流程图">
-
-<hr>
+<p><strong>?:问号与冒号组合使用</strong>
+，是三元运算符，可以简化判断语句，在C语言的学习中太过熟悉，不多赘述。</p>
+<p>以上的部分用法在以下代码中有所体现 <figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="built_in">int</span> <span class="title">ItemType</span>&lt;<span class="title">T</span>&gt;() <span class="keyword">where</span> T : ModItem</span>&#123;</span><br><span class="line">	<span class="keyword">return</span> GetInstance&lt;T&gt;()?.Type ?? <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="四汇总分析">四、汇总分析</h4>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//这两个东西很明显是泛型方法</span></span><br><span class="line"><span class="comment">//&lt;&gt;里面的东西就是具体的数据类型</span></span><br><span class="line"><span class="comment">//这里的数据类型是类，也就是我们的胸甲和腿甲</span></span><br><span class="line">ModContent.ItemType&lt;ExampleBreastplate&gt;()</span><br><span class="line">ModContent.ItemType&lt;ExampleLeggings&gt;()</span><br><span class="line"><span class="comment">//通过翻找ModContent类我们可以看到ItemType的定义</span></span><br><span class="line"><span class="comment">//这个泛型方法后面的where一串就是上面所说的泛型约束</span></span><br><span class="line"><span class="comment">//而这个后面的Type则是ModItem的属性，在其中的定义如下</span></span><br><span class="line"><span class="comment">//public int Type =&gt; Item.type;</span></span><br><span class="line"><span class="comment">//是一个只读属性，这里面的=&gt;也是一个新用法，之后再深入研究，简化了get关键字</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="built_in">int</span> <span class="title">ItemType</span>&lt;<span class="title">T</span>&gt;() <span class="keyword">where</span> T : ModItem</span>&#123;</span><br><span class="line">	<span class="keyword">return</span> GetInstance&lt;T&gt;()?.Type ?? <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//以及这里面调用的另一个函数的定义</span></span><br><span class="line"><span class="comment">//返回Instance这个属性的值</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> T <span class="title">GetInstance</span>&lt;<span class="title">T</span>&gt;() <span class="keyword">where</span> T : <span class="keyword">class</span></span>&#123;</span><br><span class="line">	<span class="keyword">return</span> ContentInstance&lt;T&gt;.Instance;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//Instance的定义在这里</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title">ContentInstance</span>&lt;<span class="title">T</span>&gt; <span class="keyword">where</span> <span class="title">T</span> : <span class="keyword">class</span>&#123;</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> T Instance &#123; <span class="keyword">get</span>; <span class="keyword">private</span> <span class="keyword">set</span>; &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>画出流程图应该是这样的 <img src="/2023/02/01/%E3%80%90tr%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91%E5%A5%97%E8%A3%85%E4%B8%8Ebuff/%E6%B5%81%E7%A8%8B%E5%9B%BE.png" class="" title="流程图"></p>
+<hr />
 <p>言归正传，接下来继续学习mod</p>
-<h2 id="药水与buff"><a href="#药水与buff" class="headerlink" title="药水与buff"></a>药水与buff</h2><h3 id="基本组成"><a href="#基本组成" class="headerlink" title="基本组成"></a>基本组成</h3><p>几乎与之前没有区别，但是 <em>SetDefaults</em> 中有一些独特的属性需要设置。</p>
+<h2 id="药水与buff">药水与buff</h2>
+<h3 id="基本组成">基本组成</h3>
+<p>几乎与之前没有区别，但是 <em>SetDefaults</em>
+中有一些独特的属性需要设置。</p>
 <ul>
-<li>item.consumable - 字面意思，设置为true这玩意才能喝，从游戏内效果来看就是 <strong>使用后数量会减少</strong> 。</li>
-<li>item.useTurn - 决定使用动画出现后，玩家转身会不会影响动画的方向，设置为true就是会</li>
-<li>item.potion - 告诉tr这是个药水，设置为true就可以使用药水的一些快捷键之类的东西。</li>
+<li>item.consumable -
+字面意思，设置为true这玩意才能喝，从游戏内效果来看就是
+<strong>使用后数量会减少</strong> 。</li>
+<li>item.useTurn -
+决定使用动画出现后，玩家转身会不会影响动画的方向，设置为true就是会</li>
+<li>item.potion -
+告诉tr这是个药水，设置为true就可以使用药水的一些快捷键之类的东西。</li>
 <li>item.healLife - 回血，会有抗药性</li>
-<li>item.buffType - 把它设置为原版的BuffID的某个值就可以使用原版的buff了</li>
+<li>item.buffType -
+把它设置为原版的BuffID的某个值就可以使用原版的buff了</li>
 <li>item.buffTime - 字面意思，但这个的单位不是秒而是帧</li>
 </ul>
-<p><a target="_blank" rel="noopener" href="https://terraria-zh.gamepedia.com/%E5%A2%9E%E7%9B%8A_ID">原版buff的ID</a></p>
-<p>但通过设置Item.buffType，只能增加 <strong>一种buff</strong> ，接下来需要 <strong>重写函数</strong> 来增加更多效果</p>
-<h3 id="重写函数"><a href="#重写函数" class="headerlink" title="重写函数"></a>重写函数</h3><p>UseItem重写函数可以增加一些效果</p>
-<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">override</span> <span class="built_in">bool</span> <span class="title">UseItem</span>(<span class="params">Player player</span>)</span>&#123;</span><br><span class="line">	player.AddBuff(BuffID.Poisoned,<span class="number">60000</span>);</span><br><span class="line">	<span class="comment">//加个猛毒buff	</span></span><br><span class="line">	player.AddBuff(BuffID.Venom,<span class="number">60000</span>);</span><br><span class="line">	<span class="comment">//返回值貌似是没什么影响</span></span><br><span class="line">	<span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
+<p><a
+target="_blank" rel="noopener" href="https://terraria-zh.gamepedia.com/%E5%A2%9E%E7%9B%8A_ID">原版buff的ID</a></p>
+<p>但通过设置Item.buffType，只能增加 <strong>一种buff</strong>
+，接下来需要 <strong>重写函数</strong> 来增加更多效果</p>
+<h3 id="重写函数">重写函数</h3>
+<p>UseItem重写函数可以增加一些效果 <figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">override</span> <span class="built_in">bool</span> <span class="title">UseItem</span>(<span class="params">Player player</span>)</span>&#123;</span><br><span class="line">	player.AddBuff(BuffID.Poisoned,<span class="number">60000</span>);</span><br><span class="line">	<span class="comment">//加个猛毒buff	</span></span><br><span class="line">	player.AddBuff(BuffID.Venom,<span class="number">60000</span>);</span><br><span class="line">	<span class="comment">//返回值貌似是没什么影响</span></span><br><span class="line">	<span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>另外附上这个函数的原型</p>
 <figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">AddBuff</span>(<span class="params"><span class="built_in">int</span> type, <span class="built_in">int</span> timeToAdd, <span class="built_in">bool</span> quiet = <span class="literal">true</span>, <span class="built_in">bool</span> foodHack = <span class="literal">false</span></span>)</span>;</span><br></pre></td></tr></table></figure>
-
 <p>后面两个先不用管，第一个是buff的id，第二个是持续时间</p>
 <p>但是使用BuffID还是只能添加原版buff，我要怎么写个自己的buff呢</p>
-<h3 id="自定义buff"><a href="#自定义buff" class="headerlink" title="自定义buff"></a>自定义buff</h3><p>buff的.cs文件要在一个叫Buffs的文件夹下创建。很明显，<strong>buff也得要贴图</strong> ，你问用在哪？buff栏上那个图标就是贴图，<del>只有画师受伤的世界建成了</del> 。</p>
-<p>我们自定义的buff类需要 <strong>继承ModBuff这个基类</strong><br>至于.cs文件里面的重写函数，首先我们添加这两个</p>
-<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">override</span> <span class="keyword">void</span> <span class="title">SetDefaults</span>()</span>&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//有两个Update，一个是对玩家生效的，一个是对NPC生效的</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">override</span> <span class="keyword">void</span> <span class="title">Update</span>(<span class="params">Player player, <span class="keyword">ref</span> <span class="built_in">int</span> buffIndex</span>)</span>&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">override</span> <span class="keyword">void</span> <span class="title">Update</span>(<span class="params">NPC npc, <span class="keyword">ref</span> <span class="built_in">int</span> buffIndex</span>)</span>&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
+<h3 id="自定义buff">自定义buff</h3>
+<p>buff的.cs文件要在一个叫Buffs的文件夹下创建。很明显，<strong>buff也得要贴图</strong>
+，你问用在哪？buff栏上那个图标就是贴图，<del>只有画师受伤的世界建成了</del>
+。</p>
+<p>我们自定义的buff类需要 <strong>继承ModBuff这个基类</strong>
+至于.cs文件里面的重写函数，首先我们添加这两个 <figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">override</span> <span class="keyword">void</span> <span class="title">SetDefaults</span>()</span>&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//有两个Update，一个是对玩家生效的，一个是对NPC生效的</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">override</span> <span class="keyword">void</span> <span class="title">Update</span>(<span class="params">Player player, <span class="keyword">ref</span> <span class="built_in">int</span> buffIndex</span>)</span>&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">override</span> <span class="keyword">void</span> <span class="title">Update</span>(<span class="params">NPC npc, <span class="keyword">ref</span> <span class="built_in">int</span> buffIndex</span>)</span>&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>直白一点来说，SetDefaults还是跟物品一样只负责设置一些基础属性，但因为这里面的SetDefaults是ModBuff类的方法，还是需要做出区分的。</p>
 <p>有一部分是必要设置的内容</p>
 <figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">DisplayName.SetDefault(<span class="string">&quot;不咸不淡&quot;</span>);</span><br><span class="line">Description.SetDefault(<span class="string">&quot;奶奶滴，跟我玩阴的是吧&quot;</span>);</span><br></pre></td></tr></table></figure>
-
 <p>还有一些可选内容，因为有点多，我把教程的代码搬过来</p>
 <figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 这个属性决定buff在游戏退出再进来后会不会仍然持续，true就是不会，false就是会</span></span><br><span class="line"></span><br><span class="line">Main.buffNoSave[Type] = <span class="literal">true</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 用来判定这个buff算不算一个debuff，如果设置为true会得到TR里对于debuff的限制，比如无法取消</span></span><br><span class="line"></span><br><span class="line">Main.debuff[Type] = <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 当然你也可以用这个属性让这个buff即使不是debuff也不能取消，设为false就是不能取消了</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">this</span>.canBeCleared = <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 决定这个buff是不是照明宠物的buff，以后讲宠物和召唤物的时候会用到的，现在先设为false</span></span><br><span class="line"></span><br><span class="line">Main.lightPet[Type] = <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 决定这个buff会不会显示持续时间，false就是会显示，true就是不会显示，一般宠物buff都不会显示</span></span><br><span class="line"></span><br><span class="line">Main.buffNoTimeDisplay[Type] = <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 决定这个buff在专家模式会不会持续时间加长，false是不会，true是会</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">this</span>.longerExpertDebuff = <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 如果这个属性为true，pvp的时候就可以给对手加上这个debuff/buff</span></span><br><span class="line"></span><br><span class="line">Main.pvpBuff[Type] = <span class="literal">true</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 决定这个buff是不是一个装饰性宠物，用来判定的，比如消除buff的时候不会消除它</span></span><br><span class="line"></span><br><span class="line">Main.vanityPet[Type] = <span class="literal">false</span>;</span><br></pre></td></tr></table></figure>
-
-<p>另外，在1.4的ExampleMod中还有一个东西</p>
-<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">BuffID.Sets.NurseCannotRemoveDebuff[Type] = <span class="literal">true</span>;</span><br></pre></td></tr></table></figure>
-<p>应该是字面意思，另外，这个Type也是一个 <strong>属性值</strong> ，源码里面对此的解释是“The buff id of this buff”</p>
-<hr>
+<p>另外，在1.4的ExampleMod中还有一个东西 <figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">BuffID.Sets.NurseCannotRemoveDebuff[Type] = <span class="literal">true</span>;</span><br></pre></td></tr></table></figure>
+应该是字面意思，另外，这个Type也是一个 <strong>属性值</strong>
+，源码里面对此的解释是“The buff id of this buff”</p>
+<hr />
 <p>接下来讨论Update这个重写函数，像写饰品效果一样，也是针对player操作，要注意的一点是，直接使用赋值语句是不够可靠的，因为需要考虑到其他buff的影响，以及玩家本身带有的一些属性。</p>
-<hr>
-<p>除此之外还有一个重写函数ReApply</p>
-<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 如果返回true就代表buff重新添加成功</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">override</span> <span class="built_in">bool</span> <span class="title">ReApply</span>(<span class="params">Player player, <span class="built_in">int</span> time, <span class="built_in">int</span> buffIndex</span>)</span> &#123;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 这段代码的作用就是当玩家被重新添加buff的时候延长buff时间</span></span><br><span class="line"></span><br><span class="line">player.buffTime[buffIndex] += time;</span><br><span class="line"></span><br><span class="line"><span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="回顾以及一些思考"><a href="#回顾以及一些思考" class="headerlink" title="回顾以及一些思考"></a>回顾以及一些思考</h2><p>至此套装以及buff的内容就结束了，但是依旧有很多炫酷的重写函数以及高级的语法我们没有了解，随着深入学习逐步发掘即可，实际上在代码分析部分，依旧无法完全刨根问底，一是因为源码的码量庞大，二是C#功底不够，因为目前为止我所使用的最多的语言还是C语言，况且因为各方面的练习题都只注重单一功能的实现，C语言很多对于组织项目而言强大又便利的特性，我使用的仍然不多，不够熟练，对mod的学习是对我自身的突破，让我更多了解真正的项目是什么样，如何利用语言的高级特性来组织项目。就算不提新的语言的学习，C语言本身的一些功能也是我需要复习和深究的。</p>
+<hr />
+<p>除此之外还有一个重写函数ReApply <figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 如果返回true就代表buff重新添加成功</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">override</span> <span class="built_in">bool</span> <span class="title">ReApply</span>(<span class="params">Player player, <span class="built_in">int</span> time, <span class="built_in">int</span> buffIndex</span>)</span> &#123;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 这段代码的作用就是当玩家被重新添加buff的时候延长buff时间</span></span><br><span class="line"></span><br><span class="line">player.buffTime[buffIndex] += time;</span><br><span class="line"></span><br><span class="line"><span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="回顾以及一些思考">回顾以及一些思考</h2>
+<p>至此套装以及buff的内容就结束了，但是依旧有很多炫酷的重写函数以及高级的语法我们没有了解，随着深入学习逐步发掘即可，实际上在代码分析部分，依旧无法完全刨根问底，一是因为源码的码量庞大，二是C#功底不够，因为目前为止我所使用的最多的语言还是C语言，况且因为各方面的练习题都只注重单一功能的实现，C语言很多对于组织项目而言强大又便利的特性，我使用的仍然不多，不够熟练，对mod的学习是对我自身的突破，让我更多了解真正的项目是什么样，如何利用语言的高级特性来组织项目。就算不提新的语言的学习，C语言本身的一些功能也是我需要复习和深究的。</p>
 <blockquote>
 <p>Written with <a target="_blank" rel="noopener" href="https://stackedit.cn/">StackEdit中文版</a>.</p>
 </blockquote>
@@ -429,7 +467,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A5%97%E8%A3%85"><span class="nav-number">1.</span> <span class="nav-text">套装</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B4%B4%E5%9B%BE"><span class="nav-number">1.1.</span> <span class="nav-text">贴图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A5%97%E8%A3%85%E7%9A%84%E4%BB%A3%E7%A0%81%E9%83%A8%E5%88%86"><span class="nav-number">1.2.</span> <span class="nav-text">套装的代码部分</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90%E4%BB%A5%E5%8F%8AC-%E5%AD%A6%E4%B9%A0"><span class="nav-number">1.3.</span> <span class="nav-text">代码分析以及C#学习</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E6%B3%9B%E5%9E%8B"><span class="nav-number">1.3.1.</span> <span class="nav-text">一、泛型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E7%B1%BB%E7%9A%84%E5%B1%9E%E6%80%A7%E4%BB%A5%E5%8F%8Aget%EF%BC%8Cset%E5%85%B3%E9%94%AE%E5%AD%97%E7%AD%89"><span class="nav-number">1.3.2.</span> <span class="nav-text">二、类的属性以及get，set关键字等</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E9%97%AE%E5%8F%B7%E7%9A%84%E6%9B%B4%E5%A4%9A%E7%94%A8%E6%B3%95"><span class="nav-number">1.3.3.</span> <span class="nav-text">三、问号的更多用法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%E6%B1%87%E6%80%BB%E5%88%86%E6%9E%90"><span class="nav-number">1.3.4.</span> <span class="nav-text">四、汇总分析</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%8D%AF%E6%B0%B4%E4%B8%8Ebuff"><span class="nav-number">2.</span> <span class="nav-text">药水与buff</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E7%BB%84%E6%88%90"><span class="nav-number">2.1.</span> <span class="nav-text">基本组成</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%87%8D%E5%86%99%E5%87%BD%E6%95%B0"><span class="nav-number">2.2.</span> <span class="nav-text">重写函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89buff"><span class="nav-number">2.3.</span> <span class="nav-text">自定义buff</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9E%E9%A1%BE%E4%BB%A5%E5%8F%8A%E4%B8%80%E4%BA%9B%E6%80%9D%E8%80%83"><span class="nav-number">3.</span> <span class="nav-text">回顾以及一些思考</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A5%97%E8%A3%85"><span class="nav-number">1.</span> <span class="nav-text">套装</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B4%B4%E5%9B%BE"><span class="nav-number">1.1.</span> <span class="nav-text">贴图</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%80%E6%B3%9B%E5%9E%8B"><span class="nav-number">1.1.1.</span> <span class="nav-text">一、泛型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BA%8C%E7%B1%BB%E7%9A%84%E5%B1%9E%E6%80%A7%E4%BB%A5%E5%8F%8Agetset%E5%85%B3%E9%94%AE%E5%AD%97%E7%AD%89"><span class="nav-number">1.1.2.</span> <span class="nav-text">二、类的属性以及get，set关键字等</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%89%E9%97%AE%E5%8F%B7%E7%9A%84%E6%9B%B4%E5%A4%9A%E7%94%A8%E6%B3%95"><span class="nav-number">1.1.3.</span> <span class="nav-text">三、问号的更多用法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9B%9B%E6%B1%87%E6%80%BB%E5%88%86%E6%9E%90"><span class="nav-number">1.1.4.</span> <span class="nav-text">四、汇总分析</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%8D%AF%E6%B0%B4%E4%B8%8Ebuff"><span class="nav-number">2.</span> <span class="nav-text">药水与buff</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E7%BB%84%E6%88%90"><span class="nav-number">2.1.</span> <span class="nav-text">基本组成</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%87%8D%E5%86%99%E5%87%BD%E6%95%B0"><span class="nav-number">2.2.</span> <span class="nav-text">重写函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89buff"><span class="nav-number">2.3.</span> <span class="nav-text">自定义buff</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9E%E9%A1%BE%E4%BB%A5%E5%8F%8A%E4%B8%80%E4%BA%9B%E6%80%9D%E8%80%83"><span class="nav-number">3.</span> <span class="nav-text">回顾以及一些思考</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -540,6 +578,8 @@
 
 
 
+
+  
 
   
 

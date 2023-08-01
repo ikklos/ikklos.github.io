@@ -20,12 +20,12 @@
     var CONFIG = {"hostname":"ikklos.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="第一个模组问世首先让我们通过tml自带的创建模组功能，创建一个新模组 在tml的 创意工坊 -&gt; 开发模组 -&gt; 创建模组 一栏创建即可，可以设置模组名称、展示名称、模组作者、模板剑等等，需要注意的是模组名称和展示名称是不一样的，模组名称是指你的源代码文件按中这个模组的名字，是不允许带空格等非法符号的。这样我们第一个模组就建成了，当然没有这么简单，这才刚刚开始，接下来我们认识一下生成的">
+  <meta name="description" content="第一个模组问世 首先让我们通过tml自带的创建模组功能，创建一个新模组 在tml的 创意工坊 -&gt; 开发模组 -&gt; 创建模组 一栏创建即可，可以设置模组名称、展示名称、模组作者、模板剑等等，需要注意的是模组名称和展示名称是不一样的，模组名称是指你的源代码文件按中这个模组的名字，是不允许带空格等非法符号的。这样我们第一个模组就建成了，当然没有这么简单，这才刚刚开始，接下来我们认识">
 <meta property="og:type" content="article">
 <meta property="og:title" content="【trmod学习笔记】第一个mod">
 <meta property="og:url" content="http://ikklos.github.io/2023/02/20/%E3%80%90trmod%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91%E7%AC%AC%E4%B8%80%E4%B8%AAmod/index.html">
 <meta property="og:site_name" content="爱斯基摩咸鱼历险记">
-<meta property="og:description" content="第一个模组问世首先让我们通过tml自带的创建模组功能，创建一个新模组 在tml的 创意工坊 -&gt; 开发模组 -&gt; 创建模组 一栏创建即可，可以设置模组名称、展示名称、模组作者、模板剑等等，需要注意的是模组名称和展示名称是不一样的，模组名称是指你的源代码文件按中这个模组的名字，是不允许带空格等非法符号的。这样我们第一个模组就建成了，当然没有这么简单，这才刚刚开始，接下来我们认识一下生成的">
+<meta property="og:description" content="第一个模组问世 首先让我们通过tml自带的创建模组功能，创建一个新模组 在tml的 创意工坊 -&gt; 开发模组 -&gt; 创建模组 一栏创建即可，可以设置模组名称、展示名称、模组作者、模板剑等等，需要注意的是模组名称和展示名称是不一样的，模组名称是指你的源代码文件按中这个模组的名字，是不允许带空格等非法符号的。这样我们第一个模组就建成了，当然没有这么简单，这才刚刚开始，接下来我们认识">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://ikklos.github.io/2023/02/20/%E3%80%90trmod%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91%E7%AC%AC%E4%B8%80%E4%B8%AAmod/index_example.png">
 <meta property="article:published_time" content="2023-02-20T06:24:46.000Z">
@@ -217,46 +217,120 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="第一个模组问世"><a href="#第一个模组问世" class="headerlink" title="第一个模组问世"></a>第一个模组问世</h1><p>首先让我们通过tml自带的创建模组功能，创建一个新模组</p>
-<p>在tml的 <strong>创意工坊</strong> -&gt; <strong>开发模组</strong> -&gt; <strong>创建模组</strong> 一栏创建即可，可以设置模组名称、展示名称、模组作者、模板剑等等，需要注意的是模组名称和展示名称是不一样的，模组名称是指你的源代码文件按中这个模组的名字，是不允许带空格等非法符号的。这样我们第一个模组就建成了，当然没有这么简单，这才刚刚开始，接下来我们认识一下生成的这些文件</p>
-<h1 id="我的模组里面都有什么"><a href="#我的模组里面都有什么" class="headerlink" title="我的模组里面都有什么"></a>我的模组里面都有什么</h1><p>通过点击“打开源码文件夹”按钮就可以直接跳转到Modsources目录，建议记住这个路径，之后再找模组源码的时候就可以不用打开tml了。</p>
+        <h1 id="第一个模组问世">第一个模组问世</h1>
+<p>首先让我们通过tml自带的创建模组功能，创建一个新模组</p>
+<p>在tml的 <strong>创意工坊</strong> -&gt; <strong>开发模组</strong>
+-&gt; <strong>创建模组</strong>
+一栏创建即可，可以设置模组名称、展示名称、模组作者、模板剑等等，需要注意的是模组名称和展示名称是不一样的，模组名称是指你的源代码文件按中这个模组的名字，是不允许带空格等非法符号的。这样我们第一个模组就建成了，当然没有这么简单，这才刚刚开始，接下来我们认识一下生成的这些文件</p>
+<h1 id="我的模组里面都有什么">我的模组里面都有什么</h1>
+<p>通过点击“打开源码文件夹”按钮就可以直接跳转到Modsources目录，建议记住这个路径，之后再找模组源码的时候就可以不用打开tml了。</p>
 <p>目前能看到的是一些必要的文件，也就是一些最基础的东西，我们来了解一下这些文件是做什么的。</p>
-<ol>
-<li><strong>[模组名称].cs</strong>  - <strong>Mod类</strong> 就在这里了，这是整个模组的中心。如果不理解类的概念没关系，先迷迷糊糊地跳过就好。后缀.cs是C#代码文件的后缀。 <strong>每一个模组只能有一个Mod类</strong> ，这是肯定的。起初它可能很简单，但慢慢地我们可以在它上面实现更多的功能。</li>
-<li><strong>description.txt</strong>  - 里面包含着这个模组的介绍，可以在游戏里显示，用来编辑我们模组的介绍信息。</li>
-<li><strong>build.txt</strong>  - 包含一些版本信息、作者名字、展示名称之类的内容。</li>
-<li><strong>icon.png</strong>  - 一个80 X 80的图片，是在游戏里显示的我们模组的图标，另外我们还可以新建一个icon_workshop.png 作为steam创意工坊上的模组图标，最大可以到 512 X 512。</li>
-<li><strong>[模组名称]. csproj</strong>  - 这是模组的项目文件，vs支持打开这种文件格式，用来组织项目，非常方便。</li>
-<li><strong>Properties&#x2F;launchSettings.json</strong>  - 与上一个文件相联系，它包含了一些debug的路径信息，最好别删</li>
-<li><strong>Items&#x2F;[物品名称].cs</strong>  - 在Items文件夹下，它是物品的源码文件</li>
-<li><strong>Items&#x2F;[物品名称].cs</strong>  - 与物品源码在同一个目录下，注意要和物品名字匹配，而且 <strong>记得要用英文</strong> 。</li>
+<ol type="1">
+<li><strong>[模组名称].cs</strong> - <strong>Mod类</strong>
+就在这里了，这是整个模组的中心。如果不理解类的概念没关系，先迷迷糊糊地跳过就好。后缀.cs是C#代码文件的后缀。
+<strong>每一个模组只能有一个Mod类</strong>
+，这是肯定的。起初它可能很简单，但慢慢地我们可以在它上面实现更多的功能。</li>
+<li><strong>description.txt</strong> -
+里面包含着这个模组的介绍，可以在游戏里显示，用来编辑我们模组的介绍信息。</li>
+<li><strong>build.txt</strong> -
+包含一些版本信息、作者名字、展示名称之类的内容。</li>
+<li><strong>icon.png</strong> - 一个80 X
+80的图片，是在游戏里显示的我们模组的图标，另外我们还可以新建一个icon_workshop.png
+作为steam创意工坊上的模组图标，最大可以到 512 X 512。</li>
+<li><strong>[模组名称]. csproj</strong> -
+这是模组的项目文件，vs支持打开这种文件格式，用来组织项目，非常方便。</li>
+<li><strong>Properties/launchSettings.json</strong> -
+与上一个文件相联系，它包含了一些debug的路径信息，最好别删</li>
+<li><strong>Items/[物品名称].cs</strong> -
+在Items文件夹下，它是物品的源码文件</li>
+<li><strong>Items/[物品名称].cs</strong> -
+与物品源码在同一个目录下，注意要和物品名字匹配，而且
+<strong>记得要用英文</strong> 。</li>
 </ol>
-<h2 id="生成模组"><a href="#生成模组" class="headerlink" title="生成模组"></a>生成模组</h2><p>目前这个模组还没法玩，因为它不是.tmod文件，怎么办呢，我们需要使用tml的生成功能，也就是在刚刚的地方点击“生成并重新加载” ，这样我们的模组就真正可以游玩了。它帮助我们把我们的源码文件打包成一个.tmod文件，如果我们需要给朋友玩玩我们的模组，只需要把这个文件给他就行了。</p>
-<h2 id="修改基础属性"><a href="#修改基础属性" class="headerlink" title="修改基础属性"></a>修改基础属性</h2><p>这可以说是最没有技术含量的操作了，相信大伙在游玩其他游戏的时候（尤其是单机游戏）都有过修改代码的经历，其实当时修改的代码就多数是数值，但是那个跟现在的情况还不一样，我们当初只是修改了配置文件里面的数值信息，我们碰不到源码，现在我们可以直接在源码里面改了， <del>这或许也是一种进步</del> 。</p>
+<h2 id="生成模组">生成模组</h2>
+<p>目前这个模组还没法玩，因为它不是.tmod文件，怎么办呢，我们需要使用tml的生成功能，也就是在刚刚的地方点击“生成并重新加载”
+，这样我们的模组就真正可以游玩了。它帮助我们把我们的源码文件打包成一个.tmod文件，如果我们需要给朋友玩玩我们的模组，只需要把这个文件给他就行了。</p>
+<h2 id="修改基础属性">修改基础属性</h2>
+<p>这可以说是最没有技术含量的操作了，相信大伙在游玩其他游戏的时候（尤其是单机游戏）都有过修改代码的经历，其实当时修改的代码就多数是数值，但是那个跟现在的情况还不一样，我们当初只是修改了配置文件里面的数值信息，我们碰不到源码，现在我们可以直接在源码里面改了，
+<del>这或许也是一种进步</del> 。</p>
 <p>我们游玩刚刚建成的模组，发现有个模板剑可以用，但它的属性太低了不够爽，怎么改呢？我们直接打开这个物品的源码文件，上文提到过，就是Item文件夹下的.cs文件，用文本编辑器打开它，或者直接用你的IDE打开整个模组的项目文件，在IDE中找到这个源码文件。无论通过哪种方式，我们看到了物品的源码。</p>
-<p>在里面找到<code>Item.damage = 50;</code> 这一行，随便改改，另外再随便改改 <code>Tooltip.SetDefault(&quot;This is a basic modded sword.&quot;);</code> 这一行，注意C#的语法要求，然后再 <strong>重新点击“生成并重新加载”生成模组</strong> ，进游戏看看效果。不出意外的话我们就能看到新的伤害数值和新的提示文本了。</p>
-<p>至于其他的属性，我们可以自由地修改一下，再 <strong>重新生成</strong> ，进游戏看看效果，这可以帮助我们更好地理解这些属性的作用，而且可以通过这种简单的操作激发我们的兴趣。</p>
-<h2 id="引用"><a href="#引用" class="headerlink" title="引用"></a>引用</h2><p>如果我们想要使用自定义的武器来发射自定义的弹幕或者实现其他类似的功能，我们需要 <strong>引用其他的类</strong> ，注意这与我们创建新的物品时 <strong>继承</strong> 的操作并不相同，我们需要借用 <code>Modcontent.SomethingType</code> 方法，其中 <strong>something</strong> 就是你想要引用的东西类型，可以是“Item”、“Projectile”、“NPC”等等。如果我们想让武器射出模组弹幕，只需要在 <code>ModItem.Setdefaults</code> 方法中写 <code>Item.shoot  = ModContent.ProjectileType&lt;弹幕的名字&gt;()</code> 即可。C#中的“方法”一词与“函数”的概念类似，只不过不同程序设计语言中叫法不一样罢了，我们需要习惯这种叫法，是为了方便C#中的面向对象思想。另外，如果我们只是想要射出原版的弹幕，我们只需要使用ProjectID即可，不需要再使用其他方法来引用弹幕类。</p>
-<h2 id="Hook（钩子）的使用"><a href="#Hook（钩子）的使用" class="headerlink" title="Hook（钩子）的使用"></a>Hook（钩子）的使用</h2><h3 id="钩子是什么"><a href="#钩子是什么" class="headerlink" title="钩子是什么"></a>钩子是什么</h3><p>根据度娘的解释，<strong>hook（钩子）是windows提供的一种消息处理机制平台，是指在程序正常运行中接受信息之前预先启动的函数，用来检查和修改传给该程序的信息，（钩子）实际上是一个处理消息的程序段，通过系统调用，把它挂入系统。每当特定的消息发出， 在没有到达目的窗口前，钩子程序就先捕获该消息，亦即钩子函数先得到控制权。这时钩子函数即可以加工处理（改变）该消息，也可以不作处理而继续传递该消息，还可以强制结束消息的传递(return)。</strong>  百度的解释太不友好了，简而言之， 钩子起到消息处理的作用。</p>
-<p>为了进一步理解钩子函数的作用，我们研究一下Windows的 <strong>消息</strong> 机制。Windows系统以消息处理作为它的控制机制，无论是系统还是应用都产生消息，移动鼠标，单击某个键位，或者是应用带给系统的变化等等都会产生一系列消息，应用和系统通过消息响应，通过消息来与各个窗口通信。</p>
-<p>每个窗口背后都有一个这样的程序，称作窗口程序，它是一段程序脚本，可以进行消息和事件的处理等等，Windows中为每条消息制定了一个消息编号，例如WM_ACTIVATE消息的意思就是“活动窗口”，也就是正在操作的这一个窗口。还有其他的消息例如Load，MouseDown等等。命令按钮也有类似的消息处理程序，它处理的消息诸如 WM_LBUTTONDOWN和<br>WM_RBUTTONDOWN，即MouseDown事件。</p>
-<p>钩子函数很强大，但在强大的功能背后也有弊端，所以合理使用钩子是很重要的。<br>但当我查找了这些资料，再回过头看教程时，我发现了这样一段话</p>
-<p><code>Firstly, they are technically not hooks.</code> 也就是说，在tml中我们使用的钩子，并不是我们上文提到的钩子。它只是叫做hook，那么上面的讨论有什么作用呢？作用就是 <del>挖坑</del> ，于是，我们关于钩子的使用研究，未完待续。</p>
-<h3 id="tml的“钩子”"><a href="#tml的“钩子”" class="headerlink" title="tml的“钩子”"></a>tml的“钩子”</h3><p>tml中的“钩子”是我们身为模组制作者可以使用的一个功能，可以使用的钩子取决于我们正在使用的类，例如，Mod类下有一个Load钩子，描述如下 <code>Override this method to add most of your content to your mod. Here you will call other methods such as AddItem. This is guaranteed to be called after all content has been autoloaded.</code>  钩子函数定义为<code>virtual</code> 类型，意味着它具有基础实现，在使用时，我们需要 <code>override</code> 它，也就是重写。即使这样，原先的 <strong>基础实现也不会消失</strong> 。</p>
+<p>在里面找到<code>Item.damage = 50;</code>
+这一行，随便改改，另外再随便改改
+<code>Tooltip.SetDefault("This is a basic modded sword.");</code>
+这一行，注意C#的语法要求，然后再
+<strong>重新点击“生成并重新加载”生成模组</strong>
+，进游戏看看效果。不出意外的话我们就能看到新的伤害数值和新的提示文本了。</p>
+<p>至于其他的属性，我们可以自由地修改一下，再 <strong>重新生成</strong>
+，进游戏看看效果，这可以帮助我们更好地理解这些属性的作用，而且可以通过这种简单的操作激发我们的兴趣。</p>
+<h2 id="引用">引用</h2>
+<p>如果我们想要使用自定义的武器来发射自定义的弹幕或者实现其他类似的功能，我们需要
+<strong>引用其他的类</strong> ，注意这与我们创建新的物品时
+<strong>继承</strong> 的操作并不相同，我们需要借用
+<code>Modcontent.SomethingType</code> 方法，其中
+<strong>something</strong>
+就是你想要引用的东西类型，可以是“Item”、“Projectile”、“NPC”等等。如果我们想让武器射出模组弹幕，只需要在
+<code>ModItem.Setdefaults</code> 方法中写
+<code>Item.shoot  = ModContent.ProjectileType&lt;弹幕的名字&gt;()</code>
+即可。C#中的“方法”一词与“函数”的概念类似，只不过不同程序设计语言中叫法不一样罢了，我们需要习惯这种叫法，是为了方便C#中的面向对象思想。另外，如果我们只是想要射出原版的弹幕，我们只需要使用ProjectID即可，不需要再使用其他方法来引用弹幕类。</p>
+<h2 id="hook钩子的使用">Hook（钩子）的使用</h2>
+<h3 id="钩子是什么">钩子是什么</h3>
+<p>根据度娘的解释，<strong>hook（钩子）是windows提供的一种消息处理机制平台，是指在程序正常运行中接受信息之前预先启动的函数，用来检查和修改传给该程序的信息，（钩子）实际上是一个处理消息的程序段，通过系统调用，把它挂入系统。每当特定的消息发出，
+在没有到达目的窗口前，钩子程序就先捕获该消息，亦即钩子函数先得到控制权。这时钩子函数即可以加工处理（改变）该消息，也可以不作处理而继续传递该消息，还可以强制结束消息的传递(return)。</strong>
+百度的解释太不友好了，简而言之， 钩子起到消息处理的作用。</p>
+<p>为了进一步理解钩子函数的作用，我们研究一下Windows的
+<strong>消息</strong>
+机制。Windows系统以消息处理作为它的控制机制，无论是系统还是应用都产生消息，移动鼠标，单击某个键位，或者是应用带给系统的变化等等都会产生一系列消息，应用和系统通过消息响应，通过消息来与各个窗口通信。</p>
+<p>每个窗口背后都有一个这样的程序，称作窗口程序，它是一段程序脚本，可以进行消息和事件的处理等等，Windows中为每条消息制定了一个消息编号，例如WM_ACTIVATE消息的意思就是“活动窗口”，也就是正在操作的这一个窗口。还有其他的消息例如Load，MouseDown等等。命令按钮也有类似的消息处理程序，它处理的消息诸如
+WM_LBUTTONDOWN和 WM_RBUTTONDOWN，即MouseDown事件。</p>
+<p>钩子函数很强大，但在强大的功能背后也有弊端，所以合理使用钩子是很重要的。
+但当我查找了这些资料，再回过头看教程时，我发现了这样一段话</p>
+<p><code>Firstly, they are technically not hooks.</code>
+也就是说，在tml中我们使用的钩子，并不是我们上文提到的钩子。它只是叫做hook，那么上面的讨论有什么作用呢？作用就是
+<del>挖坑</del> ，于是，我们关于钩子的使用研究，未完待续。</p>
+<h3 id="tml的钩子">tml的“钩子”</h3>
+<p>tml中的“钩子”是我们身为模组制作者可以使用的一个功能，可以使用的钩子取决于我们正在使用的类，例如，Mod类下有一个Load钩子，描述如下
+<code>Override this method to add most of your content to your mod. Here you will call other methods such as AddItem. This is guaranteed to be called after all content has been autoloaded.</code>
+钩子函数定义为<code>virtual</code>
+类型，意味着它具有基础实现，在使用时，我们需要 <code>override</code>
+它，也就是重写。即使这样，原先的 <strong>基础实现也不会消失</strong>
+。</p>
 <p>tml中的钩子是模组执行代码的基本因素，每一个钩子都会在游戏的更新循环中，在合适的时机被调用。</p>
-<p>举个例子，<code>ModItem.Shoot</code> 就是一个钩子，当每次武器需要发射弹幕的时候这个钩子就会被调用，制作者通过 <strong>重写</strong> 添加的一些代码就会在这时被执行。</p>
-<p>我们可以在<a target="_blank" rel="noopener" href="http://tmodloader.github.io/tModLoader/docs/1.4-stable/class_terraria_1_1_mod_loader_1_1_mod_item.html">ModItem文档</a>中寻找相应的一些钩子，需要注意的是这些钩子是在ModItem类下工作的。<br>其中我们可以找到<code>UpdateInventory</code> 这个方法，它的文档告诉我们这个“钩子”可以让我们自定义当这个物品在库存内时发生的事。它的原型如下</p>
-<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">virtual</span> <span class="keyword">void</span> Terraria.ModLoader.ModItem.UpdateInventory (Player player)</span><br></pre></td></tr></table></figure>
-
-<p>如果我们要在我们自己的物品中使用它，我们需要先做三件事，首先把上面的东西复制过去，之后我们需要把virtual 改成 override ，然后我们需要删掉一些不必要的代码，我们注意到当前的代码是在ModItem类下写的，所以我们并不需要 <code>Terraria.ModLoader.ModItem</code> 这样一串前缀。另外我们需要告诉计算机，Player这个东西是什么，我们可以在代码的最上面添加 <code>using Terraria;</code>  来使用Terraria命名空间，这里面就有Player的定义。接下来我们就可以在里面添加代码了，对于特定功能的实现在其他文章中有涉及，ExampleMod可以作为参考，以及<a target="_blank" rel="noopener" href="https://github.com/tModLoader/tModLoader/wiki/Advanced-Vanilla-Code-Adaption">这篇文章</a> ，它主要讲述一些功能的实现，以及自定义AI等等。对于这些暂时放到之后的文章中展开研究。</p>
-<h2 id="Index-和-Type"><a href="#Index-和-Type" class="headerlink" title="Index 和 Type"></a>Index 和 Type</h2><p>这两个都是整数类型，但如果混淆它们则有可能在编译中出现bug，接下来我们看看它们的区别。</p>
+<p>举个例子，<code>ModItem.Shoot</code>
+就是一个钩子，当每次武器需要发射弹幕的时候这个钩子就会被调用，制作者通过
+<strong>重写</strong> 添加的一些代码就会在这时被执行。</p>
+<p>我们可以在<a
+target="_blank" rel="noopener" href="http://tmodloader.github.io/tModLoader/docs/1.4-stable/class_terraria_1_1_mod_loader_1_1_mod_item.html">ModItem文档</a>中寻找相应的一些钩子，需要注意的是这些钩子是在ModItem类下工作的。
+其中我们可以找到<code>UpdateInventory</code>
+这个方法，它的文档告诉我们这个“钩子”可以让我们自定义当这个物品在库存内时发生的事。它的原型如下
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">virtual</span> <span class="keyword">void</span> Terraria.ModLoader.ModItem.UpdateInventory (Player player)</span><br></pre></td></tr></table></figure></p>
+<p>如果我们要在我们自己的物品中使用它，我们需要先做三件事，首先把上面的东西复制过去，之后我们需要把virtual
+改成 override
+，然后我们需要删掉一些不必要的代码，我们注意到当前的代码是在ModItem类下写的，所以我们并不需要
+<code>Terraria.ModLoader.ModItem</code>
+这样一串前缀。另外我们需要告诉计算机，Player这个东西是什么，我们可以在代码的最上面添加
+<code>using Terraria;</code>
+来使用Terraria命名空间，这里面就有Player的定义。接下来我们就可以在里面添加代码了，对于特定功能的实现在其他文章中有涉及，ExampleMod可以作为参考，以及<a
+target="_blank" rel="noopener" href="https://github.com/tModLoader/tModLoader/wiki/Advanced-Vanilla-Code-Adaption">这篇文章</a>
+，它主要讲述一些功能的实现，以及自定义AI等等。对于这些暂时放到之后的文章中展开研究。</p>
+<h2 id="index-和-type">Index 和 Type</h2>
+<p>这两个都是整数类型，但如果混淆它们则有可能在编译中出现bug，接下来我们看看它们的区别。</p>
 <p><code>Type</code>可以看作是“静态的”，泰拉瑞亚中每一个物品都有一个<code>Type</code>，而且是独一无二的，用来区分不同的物品（这里的物品包括很多，包括弹幕之类）</p>
-<p><code>Index</code> 是另一种概念，游戏在运行时会开辟一部分空间，用这个临时数组来存储 <strong>活动的</strong> 物品，也就是说它是动态的，每一件物品并不会像 <code>Type</code> 那样有一个固定的编号。比如说 <code>Main.projectile[]</code> 里面存储了目前世界中所有的弹幕，每一个弹幕可以通过 <code>whoAmI</code> 字段获取它们自己的编号。<br>附上一张图帮助理解，来自原教程</p>
-<img src="/2023/02/20/%E3%80%90trmod%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91%E7%AC%AC%E4%B8%80%E4%B8%AAmod/index_example.png" class="" title="Index_example">
-
-<h2 id="创建自己的模组类"><a href="#创建自己的模组类" class="headerlink" title="创建自己的模组类"></a>创建自己的模组类</h2><p>想要创建自己的模组类，或更具体地说，想要创建自己的模组物品，使用的最简单的方式就是 <strong>派生类</strong> 或者叫做 <strong>继承</strong>  ，比如<code>MyItemClass : ModItem</code> 这样就创建了一个物品，冒号后面加ModItem表示它继承了ModItem，同理我们也可以继承其他的类，但只能同时继承一个类，也就是说我们不能弄一个既是物品又是弹幕的类。我们做了继承ModItem的操作之后，ModItem中的钩子就可以使用了。</p>
-<hr>
-<p>最后放一个实用的网址，这里是tml的官方文档，里面可以查到很多类以及方法的作用<a target="_blank" rel="noopener" href="https://tmodloader.github.io/tModLoader/docs/1.4-stable/annotated.html">ClassList</a></p>
+<p><code>Index</code>
+是另一种概念，游戏在运行时会开辟一部分空间，用这个临时数组来存储
+<strong>活动的</strong> 物品，也就是说它是动态的，每一件物品并不会像
+<code>Type</code> 那样有一个固定的编号。比如说
+<code>Main.projectile[]</code>
+里面存储了目前世界中所有的弹幕，每一个弹幕可以通过 <code>whoAmI</code>
+字段获取它们自己的编号。 附上一张图帮助理解，来自原教程
+<img src="/2023/02/20/%E3%80%90trmod%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91%E7%AC%AC%E4%B8%80%E4%B8%AAmod/index_example.png" class="" title="Index_example"></p>
+<p>## 创建自己的模组类</p>
+<p>想要创建自己的模组类，或更具体地说，想要创建自己的模组物品，使用的最简单的方式就是
+<strong>派生类</strong> 或者叫做 <strong>继承</strong>
+，比如<code>MyItemClass : ModItem</code>
+这样就创建了一个物品，冒号后面加ModItem表示它继承了ModItem，同理我们也可以继承其他的类，但只能同时继承一个类，也就是说我们不能弄一个既是物品又是弹幕的类。我们做了继承ModItem的操作之后，ModItem中的钩子就可以使用了。</p>
+<hr />
+<p>最后放一个实用的网址，这里是tml的官方文档，里面可以查到很多类以及方法的作用<a
+target="_blank" rel="noopener" href="https://tmodloader.github.io/tModLoader/docs/1.4-stable/annotated.html">ClassList</a></p>
 
     </div>
 
@@ -341,7 +415,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AC%AC%E4%B8%80%E4%B8%AA%E6%A8%A1%E7%BB%84%E9%97%AE%E4%B8%96"><span class="nav-number">1.</span> <span class="nav-text">第一个模组问世</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%88%91%E7%9A%84%E6%A8%A1%E7%BB%84%E9%87%8C%E9%9D%A2%E9%83%BD%E6%9C%89%E4%BB%80%E4%B9%88"><span class="nav-number">2.</span> <span class="nav-text">我的模组里面都有什么</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%9F%E6%88%90%E6%A8%A1%E7%BB%84"><span class="nav-number">2.1.</span> <span class="nav-text">生成模组</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9%E5%9F%BA%E7%A1%80%E5%B1%9E%E6%80%A7"><span class="nav-number">2.2.</span> <span class="nav-text">修改基础属性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%95%E7%94%A8"><span class="nav-number">2.3.</span> <span class="nav-text">引用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Hook%EF%BC%88%E9%92%A9%E5%AD%90%EF%BC%89%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="nav-number">2.4.</span> <span class="nav-text">Hook（钩子）的使用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%92%A9%E5%AD%90%E6%98%AF%E4%BB%80%E4%B9%88"><span class="nav-number">2.4.1.</span> <span class="nav-text">钩子是什么</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#tml%E7%9A%84%E2%80%9C%E9%92%A9%E5%AD%90%E2%80%9D"><span class="nav-number">2.4.2.</span> <span class="nav-text">tml的“钩子”</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Index-%E5%92%8C-Type"><span class="nav-number">2.5.</span> <span class="nav-text">Index 和 Type</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E8%87%AA%E5%B7%B1%E7%9A%84%E6%A8%A1%E7%BB%84%E7%B1%BB"><span class="nav-number">2.6.</span> <span class="nav-text">创建自己的模组类</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AC%AC%E4%B8%80%E4%B8%AA%E6%A8%A1%E7%BB%84%E9%97%AE%E4%B8%96"><span class="nav-number">1.</span> <span class="nav-text">第一个模组问世</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%88%91%E7%9A%84%E6%A8%A1%E7%BB%84%E9%87%8C%E9%9D%A2%E9%83%BD%E6%9C%89%E4%BB%80%E4%B9%88"><span class="nav-number">2.</span> <span class="nav-text">我的模组里面都有什么</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%9F%E6%88%90%E6%A8%A1%E7%BB%84"><span class="nav-number">2.1.</span> <span class="nav-text">生成模组</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9%E5%9F%BA%E7%A1%80%E5%B1%9E%E6%80%A7"><span class="nav-number">2.2.</span> <span class="nav-text">修改基础属性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%95%E7%94%A8"><span class="nav-number">2.3.</span> <span class="nav-text">引用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#hook%E9%92%A9%E5%AD%90%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="nav-number">2.4.</span> <span class="nav-text">Hook（钩子）的使用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%92%A9%E5%AD%90%E6%98%AF%E4%BB%80%E4%B9%88"><span class="nav-number">2.4.1.</span> <span class="nav-text">钩子是什么</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#tml%E7%9A%84%E9%92%A9%E5%AD%90"><span class="nav-number">2.4.2.</span> <span class="nav-text">tml的“钩子”</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#index-%E5%92%8C-type"><span class="nav-number">2.5.</span> <span class="nav-text">Index 和 Type</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -452,6 +526,8 @@
 
 
 
+
+  
 
   
 
