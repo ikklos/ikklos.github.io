@@ -117,7 +117,7 @@
   </li>
         <li class="menu-item menu-item-tags">
 
-    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">5</span></a>
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">6</span></a>
 
   </li>
         <li class="menu-item menu-item-categories">
@@ -127,7 +127,7 @@
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">7</span></a>
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">11</span></a>
 
   </li>
   </ul>
@@ -153,6 +153,348 @@
 
           <div class="content index posts-expand">
             
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://ikklos.github.io/2023/08/01/%E6%96%9C%E7%8E%87%E4%BC%98%E5%8C%96dp/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/ikklo.jpg">
+      <meta itemprop="name" content="爱斯基摩咸鱼">
+      <meta itemprop="description" content="路漫漫其修远兮，吾将上下而求索">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="爱斯基摩咸鱼历险记">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2023/08/01/%E6%96%9C%E7%8E%87%E4%BC%98%E5%8C%96dp/" class="post-title-link" itemprop="url">斜率优化dp</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2023-08-01 14:39:29 / 修改时间：16:13:32" itemprop="dateCreated datePublished" datetime="2023-08-01T14:39:29+08:00">2023-08-01</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="斜率优化"><a href="#斜率优化" class="headerlink" title="斜率优化"></a>斜率优化</h1><p>斜率优化与决策单调性一样，都是在决策点上做文章，但斜率优化需要更多推导，常见的方式是，我们假设后面的点比前面的点更优，推导出一个类似斜率的式子，就像$slope_{i,i+1} &lt; p$或者类似的形式，然后我们只需要维护一个凸包即可，用具体的例子可能更好理解</p>
+<blockquote>
+<p>洛谷P3648 序列分割</p>
+</blockquote>
+<blockquote>
+<p>你正在玩一个关于长度为n的非负整数序列的游戏。这个游戏中你需要把序列分成k+1个非空的块。为了得到k+1块，你需要重复下面的操作k次</p>
+</blockquote>
+<blockquote>
+<p>选择一个有超过一个元素的块（初始时你只有一块，即整个序列</p>
+</blockquote>
+<blockquote>
+<p>选择两个相邻元素把这个块从中间分开，得到两个非空的块。</p>
+</blockquote>
+<blockquote>
+<p>每次操作后你将获得那两个新产生的块的元素和的乘积的分数。你想要最大化最后的总得分。</p>
+</blockquote>
+<p>当我们试图对整个序列进行上述操作时，如果我们只着眼于最后一块的某个元素，我们发现它与前面的块中的所有的数都乘了一遍，无论分割顺序如何。这样我们就可以列出转移方程</p>
+<p>我们设 $dp_{i,j}$ 为只考虑前i个元素，分成j块，我们得到的最大分数，$sum$ 为区间和，转移方程如下</p>
+<p>$$<br>dp_{i,j} &#x3D; \max(dp_{k,j - 1} + sum(k + 1,i)\times sum(1,k))<br>$$</p>
+<p>很明显，找决策点k的方式是需要优化的地方，暴力寻找决策点只会导致 $O(n^2m)$ 的复杂度，我们尝试寻找决策点的性质</p>
+<p>我们以 $g_k$ 替代 $dp_{k,j - 1}$ ,假设k+1比k更优，则有</p>
+<p>$$<br>g_{k + 1} + sum(k + 2,i) \times sum(1,k+1) &gt; g_{k} + sum(k + 1,i) \times sum(1,k)<br>\newline<br>g_{k + 1} + (S_i - S_{k + 1}) \times S_{k+1} &gt; g_{k} + (S_i - S_{k}) \times S_k<br>\newline<br>\frac{(g_{k + 1} - S_{k + 1}^2) - (g_k - S_{k}^2)}{(-S_{k + 1}) - (-S_k)} &lt; S_i<br>$$<br>对于最后的式子，如果我们对于每个点，以点坐标的形式存储 $(-S_k,g_k - S_{k + 1}^2)$ 那么如果斜率符合上式，则证明后面的决策点更优，对于每一个 $f_{i,j}$ 我们只需要动态维护凸包即可，就像求极值点一样，取斜率最大的小于 $S_i$ 的点，就是它的最优决策点。</p>
+<p>代码如下，虽然可能与上面最后的式子有所不同，但本质上是相同的</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;bits\stdc++.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> MAXN 100010</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> MAXK 205</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> INF 0x3f3f3f3f</span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="keyword">using</span> ll = <span class="type">long</span> <span class="type">long</span>;</span><br><span class="line"><span class="keyword">typedef</span> <span class="type">long</span> <span class="type">double</span> lD;</span><br><span class="line"><span class="type">const</span> <span class="type">double</span> emp = <span class="number">1e-9</span>;</span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="type">bool</span> <span class="title">isbigger</span><span class="params">(<span class="type">double</span> a, <span class="type">double</span> b)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(a - b &gt;= <span class="number">0</span>)<span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">node</span>&#123;</span><br><span class="line">    ll x,y;</span><br><span class="line">    <span class="built_in">node</span>()&#123;&#125;</span><br><span class="line">    <span class="built_in">node</span>(ll x, ll y):<span class="built_in">x</span>(x),<span class="built_in">y</span>(y)&#123;&#125;</span><br><span class="line">&#125;;</span><br><span class="line">ll S[MAXN];</span><br><span class="line">ll dp[MAXN][MAXK];</span><br><span class="line"><span class="type">int</span> d[MAXN][MAXK];</span><br><span class="line">node q[MAXN];</span><br><span class="line"><span class="type">int</span> ids[MAXN];</span><br><span class="line"><span class="type">int</span> lp,rp;</span><br><span class="line"><span class="type">int</span> n,k;</span><br><span class="line"><span class="function"><span class="keyword">inline</span> lD <span class="title">slope</span><span class="params">(node n, node n2)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(<span class="built_in">abs</span>(n2.x - n.x) == <span class="number">0</span>)<span class="keyword">return</span> INF;</span><br><span class="line">    <span class="keyword">return</span> ((lD)n2.y - (lD)n.y) / ((lD)n2.x - (lD)n.x);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">out</span><span class="params">(<span class="type">int</span> k, <span class="type">int</span> id)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(k == <span class="number">0</span>)<span class="keyword">return</span>;</span><br><span class="line">    <span class="built_in">out</span>(k - <span class="number">1</span>,d[id][k - <span class="number">1</span>]);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d &quot;</span>,id);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d%d&quot;</span>,&amp;n,&amp;k);</span><br><span class="line">    S[<span class="number">0</span>] = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">1</span>; i &lt;= n; i++)&#123;</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%lld&quot;</span>,S + i);</span><br><span class="line">        S[i] += S[i - <span class="number">1</span>];</span><br><span class="line">    &#125;</span><br><span class="line">    lp = <span class="number">0</span>,rp = <span class="number">-1</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">1</span>;i &lt;= n; i++)&#123;</span><br><span class="line">        dp[i][<span class="number">1</span>] = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> j = <span class="number">1</span>; j &lt;= k; j++)&#123;</span><br><span class="line">        lp = <span class="number">0</span>, rp = <span class="number">-1</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">1</span>; i &lt;= n; i++)&#123;</span><br><span class="line">            </span><br><span class="line">            node x = &#123;-S[i],dp[i][j - <span class="number">1</span>] - S[i]*S[i]&#125;;</span><br><span class="line">            </span><br><span class="line">            <span class="keyword">while</span>(lp &lt; rp &amp;&amp; ((lD)S[i] &gt;= <span class="built_in">slope</span>(q[lp],q[lp + <span class="number">1</span>]) || ids[lp] &lt; j))lp++;<span class="comment">//如果斜率满足不等式，证明后面的点更优，那么前面的点直接抛弃即可</span></span><br><span class="line">            </span><br><span class="line">            <span class="comment">//cout &lt;&lt; ids[lp] &lt;&lt;&quot; &quot;&lt;&lt; i &lt;&lt;&quot; &quot;&lt;&lt; j &lt;&lt; endl;</span></span><br><span class="line">            dp[i][j] = q[lp].y - q[lp].x * S[i];</span><br><span class="line">            d[i][j] = ids[lp];</span><br><span class="line">            <span class="keyword">while</span>(lp &lt; rp &amp;&amp; <span class="built_in">slope</span>(q[rp - <span class="number">1</span>],q[rp]) &gt;= <span class="built_in">slope</span>(q[rp],x))&#123;</span><br><span class="line">                rp--;<span class="comment">//需要使其满足凸包性质</span></span><br><span class="line">            &#125;</span><br><span class="line">            ids[++rp] = i;</span><br><span class="line">            q[rp] = x;</span><br><span class="line">            </span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%lld\n&quot;</span>,dp[n][k]);</span><br><span class="line">    <span class="built_in">out</span>(k,d[n][k]);</span><br><span class="line">    <span class="built_in">puts</span>(<span class="string">&quot;&quot;</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="李超线段树"><a href="#李超线段树" class="headerlink" title="李超线段树"></a>李超线段树</h1><p>显然，李超线段树是一种线段树，<del>但它更加线段树</del>，它可以用来维护一大堆线段，并且可以支持单点查询，也就是给定一个点，它可以给出在这个点上所有线段的最大值。</p>
+<p>李超线段树是一种标记永久化线段树，也就是它并没有pushdown操作，在查询的时候，需要对路线上遇到的所有的线段取最大值。</p>
+<h2 id="更新（插入一条线段）"><a href="#更新（插入一条线段）" class="headerlink" title="更新（插入一条线段）"></a>更新（插入一条线段）</h2><p>我们称一条线段“控制”这个区间，当且仅当目前为止，对于在这个区间内的任意点，这条线段都在最上方，也就是最大值都在这条线段上。</p>
+<p>当需要在l，r中插入一条线段时，需要考虑这条线段L2与当前控制这个区间的线段L的位置关系，如果L2覆盖在L的上方，则更新这个区间，并结束向下递归，如果L覆盖在L2的上方，则不更新这个区间，也结束向下递归，如果两个线段交叉，则取mid&#x3D;(l+r)&gt;&gt;1，对左右区间递归。容易发现这个递归是一定可以结束的。</p>
+<p>可以结合下图理解（图片来源于oi-wiki）</p>
+<img src="/2023/08/01/%E6%96%9C%E7%8E%87%E4%BC%98%E5%8C%96dp/1.png" class="" title="LICHAO_Tree">
+
+<h2 id="查询"><a href="#查询" class="headerlink" title="查询"></a>查询</h2><p>查询操作也是递归完成的，直接查询并且对于经过的节点存储的线段取max即可，需要注意一些细节。</p>
+<h2 id="李超线段树实现"><a href="#李超线段树实现" class="headerlink" title="李超线段树实现"></a>李超线段树实现</h2><p>具体实现如下</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> MAXN 100010</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> MAXK 205</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> INF 0x3f3f3f3f</span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="keyword">using</span> ll = <span class="type">long</span> <span class="type">long</span>;</span><br><span class="line">ll dp[MAXN][MAXK];</span><br><span class="line"><span class="type">int</span> d[MAXN][MAXK];</span><br><span class="line">ll a[MAXN];</span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">line</span>&#123;<span class="comment">//线段</span></span><br><span class="line">    ll k,b;</span><br><span class="line">    <span class="type">int</span> id;</span><br><span class="line">    <span class="built_in">line</span>()&#123;&#125;</span><br><span class="line">    <span class="built_in">line</span>(ll k,ll b):<span class="built_in">k</span>(k),<span class="built_in">b</span>(b)&#123;&#125;</span><br><span class="line">    <span class="built_in">line</span>(ll k,ll b, <span class="type">int</span> id):<span class="built_in">k</span>(k),<span class="built_in">b</span>(b),<span class="built_in">id</span>(id)&#123;&#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="function">vector&lt;line&gt; <span class="title">tree</span><span class="params">(MAXN &lt;&lt; <span class="number">2</span>)</span></span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="type">void</span> <span class="title">upd</span><span class="params">(<span class="type">int</span> id, <span class="type">int</span> l2, <span class="type">int</span> r2, ll k, ll b, <span class="type">int</span> p)</span></span>&#123;<span class="comment">//更新某区间</span></span><br><span class="line">    line tag = tree[id];</span><br><span class="line">    <span class="keyword">if</span>(tag.k * a[l2] + tag.b &gt; k * a[l2] + b &amp;&amp; tag.k * a[r2] + tag.b &gt; k * a[r2] + b)<span class="keyword">return</span>;</span><br><span class="line">    <span class="keyword">if</span>(tag.k * a[l2] + tag.b &lt;= k * a[l2] + b &amp;&amp; tag.k * a[r2] + tag.b &lt;= k * a[r2] + b)&#123;</span><br><span class="line">        tree[id] = &#123;k,b,p&#125;;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(l2 == r2)<span class="keyword">return</span>;</span><br><span class="line">    <span class="built_in">upd</span>(id * <span class="number">2</span>,l2,(l2 + r2) &gt;&gt; <span class="number">1</span>,k,b,p);</span><br><span class="line">    <span class="built_in">upd</span>(id * <span class="number">2</span> + <span class="number">1</span>,((l2 + r2) &gt;&gt; <span class="number">1</span>) + <span class="number">1</span>,r2,k,b,p);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="type">void</span> <span class="title">update</span><span class="params">(<span class="type">int</span> id,<span class="type">int</span> l, <span class="type">int</span> r,<span class="type">int</span> l2,<span class="type">int</span> r2, ll k, ll b,<span class="type">int</span> p)</span></span>&#123;<span class="comment">//插入线段</span></span><br><span class="line">    <span class="keyword">if</span>(l2 &gt; r2)<span class="keyword">return</span>;</span><br><span class="line">    <span class="keyword">if</span>(r &lt; l2 || l &gt; r2)&#123;<span class="keyword">return</span>;&#125;</span><br><span class="line">    <span class="keyword">if</span>(l &gt;= l2 &amp;&amp; r &lt;= r2)&#123;</span><br><span class="line">        <span class="built_in">upd</span>(id,l,r,k,b,p);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">update</span>(<span class="number">2</span> * id, l , (l + r) &gt;&gt; <span class="number">1</span>, l2, r2, k, b,p);</span><br><span class="line">    <span class="built_in">update</span>(<span class="number">2</span> * id + <span class="number">1</span>, ((l + r) &gt;&gt; <span class="number">1</span>) + <span class="number">1</span>, r, l2, r2, k, b,p);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">inline</span> line <span class="title">pmax</span><span class="params">(line aa, line b, <span class="type">int</span> d)</span></span>&#123;<span class="comment">//比较两条线段，返回一条线段，这条线段在d点值更大</span></span><br><span class="line">    <span class="keyword">if</span>(aa.k * a[d] + aa.b &gt; b.k * a[d] + b.b)<span class="keyword">return</span> aa;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">return</span> b; </span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">inline</span> line <span class="title">query</span><span class="params">(<span class="type">int</span> id, <span class="type">int</span> l, <span class="type">int</span> r, <span class="type">int</span> d)</span></span>&#123;</span><br><span class="line">    <span class="type">int</span> mid = (l + r) &gt;&gt; <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">if</span>(r &lt; d || l &gt; d)<span class="keyword">return</span> &#123;-INF,-INF&#125;;</span><br><span class="line">    <span class="keyword">if</span>(l == r &amp;&amp; l == d)<span class="keyword">return</span> tree[id];</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">pmax</span>(tree[id],d &lt;= mid?<span class="built_in">query</span>(<span class="number">2</span> * id,l,mid,d):<span class="built_in">query</span>(<span class="number">2</span> * id + <span class="number">1</span>,mid + <span class="number">1</span>, r,d),d);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>对于插入操作，我们注意到，需要用两个函数，一个update函数用来寻找插入区间，另外一个upd函数用于更新，所以插入的时间复杂度为 $O(\log^2 n)$，查询的时间复杂度为 $O(\log n)$</p>
+<h2 id="李超线段树应用"><a href="#李超线段树应用" class="headerlink" title="李超线段树应用"></a>李超线段树应用</h2><p>我们再看上面的斜率优化的题目，我们想要让<br>$$<br>dp_{i,j} &#x3D; \max(dp_{k,j - 1} + sum(k + 1,i)\times sum(1,k))<br>$$<br>最大化，稍微变形一下</p>
+<p>$$<br>\max(g_k + S_i \times S_k - S_k^2)<br>\newline S_k \times S_i + g_k - S_k^2<br>\newline y &#x3D; S_k \times x + g_k - S_k^2<br>$$</p>
+<p>这就化成了线的形式，如果要求 $dp_{i,j}$ 我们只需要对于每一个 $dp_{k,j - 1}$ ，化为线段斜率和截距的形式，插入对应的区间，再对每一个 $S_i$ 求最优的线段即可，但是很遗憾，这道题的数据范围很大，李超线段树附加了log复杂度，所以并不能过这道题</p>
+<p>但是我还是写了很长时间一直在TLE，<del>最终得知过不了的时候我崩溃的同时也释然了</del></p>
+<p>所以李超线段树做法的代码如下</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> MAXN 100010</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> MAXK 205</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> INF 0x3f3f3f3f</span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="keyword">using</span> ll = <span class="type">long</span> <span class="type">long</span>;</span><br><span class="line">ll dp[MAXN][MAXK];</span><br><span class="line"><span class="type">int</span> d[MAXN][MAXK];</span><br><span class="line">ll a[MAXN];</span><br><span class="line"><span class="comment">//李超线段树,浮点运算需要比大小需要注意精度近似</span></span><br><span class="line"><span class="comment">//提示，这题过不了nklog</span></span><br><span class="line"><span class="comment">//写了也过不了哈哈哈</span></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">line</span>&#123;</span><br><span class="line">    ll k,b;</span><br><span class="line">    <span class="type">int</span> id;</span><br><span class="line">    <span class="built_in">line</span>()&#123;&#125;</span><br><span class="line">    <span class="built_in">line</span>(ll k,ll b):<span class="built_in">k</span>(k),<span class="built_in">b</span>(b)&#123;&#125;</span><br><span class="line">    <span class="built_in">line</span>(ll k,ll b, <span class="type">int</span> id):<span class="built_in">k</span>(k),<span class="built_in">b</span>(b),<span class="built_in">id</span>(id)&#123;&#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="function">vector&lt;line&gt; <span class="title">tree</span><span class="params">(MAXN &lt;&lt; <span class="number">2</span>)</span></span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="type">void</span> <span class="title">upd</span><span class="params">(<span class="type">int</span> id, <span class="type">int</span> l2, <span class="type">int</span> r2, ll k, ll b, <span class="type">int</span> p)</span></span>&#123;</span><br><span class="line">    line tag = tree[id];</span><br><span class="line">    <span class="keyword">if</span>(tag.k * a[l2] + tag.b &gt; k * a[l2] + b &amp;&amp; tag.k * a[r2] + tag.b &gt; k * a[r2] + b)<span class="keyword">return</span>;</span><br><span class="line">    <span class="keyword">if</span>(tag.k * a[l2] + tag.b &lt;= k * a[l2] + b &amp;&amp; tag.k * a[r2] + tag.b &lt;= k * a[r2] + b)&#123;</span><br><span class="line">        tree[id] = &#123;k,b,p&#125;;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(l2 == r2)<span class="keyword">return</span>;</span><br><span class="line">    <span class="built_in">upd</span>(id * <span class="number">2</span>,l2,(l2 + r2) &gt;&gt; <span class="number">1</span>,k,b,p);</span><br><span class="line">    <span class="built_in">upd</span>(id * <span class="number">2</span> + <span class="number">1</span>,((l2 + r2) &gt;&gt; <span class="number">1</span>) + <span class="number">1</span>,r2,k,b,p);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="type">void</span> <span class="title">update</span><span class="params">(<span class="type">int</span> id,<span class="type">int</span> l, <span class="type">int</span> r,<span class="type">int</span> l2,<span class="type">int</span> r2, ll k, ll b,<span class="type">int</span> p)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(l2 &gt; r2)<span class="keyword">return</span>;</span><br><span class="line">    <span class="keyword">if</span>(r &lt; l2 || l &gt; r2)&#123;<span class="keyword">return</span>;&#125;</span><br><span class="line">    <span class="keyword">if</span>(l &gt;= l2 &amp;&amp; r &lt;= r2)&#123;</span><br><span class="line">        <span class="built_in">upd</span>(id,l,r,k,b,p);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">update</span>(<span class="number">2</span> * id, l , (l + r) &gt;&gt; <span class="number">1</span>, l2, r2, k, b,p);</span><br><span class="line">    <span class="built_in">update</span>(<span class="number">2</span> * id + <span class="number">1</span>, ((l + r) &gt;&gt; <span class="number">1</span>) + <span class="number">1</span>, r, l2, r2, k, b,p);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">inline</span> line <span class="title">pmax</span><span class="params">(line aa, line b, <span class="type">int</span> d)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(aa.k * a[d] + aa.b &gt; b.k * a[d] + b.b)<span class="keyword">return</span> aa;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">return</span> b; </span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">inline</span> line <span class="title">query</span><span class="params">(<span class="type">int</span> id, <span class="type">int</span> l, <span class="type">int</span> r, <span class="type">int</span> d)</span></span>&#123;</span><br><span class="line">    <span class="type">int</span> mid = (l + r) &gt;&gt; <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">if</span>(r &lt; d || l &gt; d)<span class="keyword">return</span> &#123;-INF,-INF&#125;;</span><br><span class="line">    <span class="keyword">if</span>(l == r &amp;&amp; l == d)<span class="keyword">return</span> tree[id];</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">pmax</span>(tree[id],d &lt;= mid?<span class="built_in">query</span>(<span class="number">2</span> * id,l,mid,d):<span class="built_in">query</span>(<span class="number">2</span> * id + <span class="number">1</span>,mid + <span class="number">1</span>, r,d),d);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">out</span><span class="params">(<span class="type">int</span> k, <span class="type">int</span> id)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(k == <span class="number">0</span>)<span class="keyword">return</span>;</span><br><span class="line">    <span class="built_in">out</span>(k - <span class="number">1</span>,d[id][k - <span class="number">1</span>]);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d &quot;</span>,id);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">////////////////////////////////////////////////</span></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="type">int</span> n, k;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d%d&quot;</span>,&amp;n,&amp;k);</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">1</span>; i &lt;= n; i++)&#123;</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%lld&quot;</span>,a + i);</span><br><span class="line">        a[i] += a[i - <span class="number">1</span>];</span><br><span class="line">    &#125;</span><br><span class="line">    line l;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">1</span>; i &lt;= n &lt;&lt; <span class="number">2</span>; i++)&#123;</span><br><span class="line">        tree[i] = &#123;-INF,-INF,<span class="number">0</span>&#125;;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">1</span>; i &lt;= n; i++)&#123;</span><br><span class="line">        <span class="built_in">update</span>(<span class="number">1</span>,<span class="number">1</span>,n,i + <span class="number">1</span>,n,a[i],- a[i] * a[i],i);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> j = <span class="number">1</span>; j &lt;= k; j++)&#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">1</span>; i &lt;= n; i++)&#123;</span><br><span class="line">            <span class="built_in">update</span>(<span class="number">1</span>,<span class="number">1</span>,n,i + <span class="number">1</span>,n,a[i],dp[i][j - <span class="number">1</span>] - a[i] * a[i],i);</span><br><span class="line">            l = <span class="built_in">query</span>(<span class="number">1</span>,<span class="number">1</span>,n,i);</span><br><span class="line">            dp[i][j] = l.k * a[i] + l.b;</span><br><span class="line">            d[i][j] = l.id;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%lld\n&quot;</span>,dp[n][k]);</span><br><span class="line">    <span class="built_in">out</span>(k,d[n][k]);</span><br><span class="line">    <span class="built_in">puts</span>(<span class="string">&quot;&quot;</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://ikklos.github.io/2023/07/31/%E7%BB%84%E5%90%88%E6%95%B0%E5%AD%A6%E4%B8%8E%E6%A6%82%E7%8E%87%E6%9C%9F%E6%9C%9B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/ikklo.jpg">
+      <meta itemprop="name" content="爱斯基摩咸鱼">
+      <meta itemprop="description" content="路漫漫其修远兮，吾将上下而求索">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="爱斯基摩咸鱼历险记">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2023/07/31/%E7%BB%84%E5%90%88%E6%95%B0%E5%AD%A6%E4%B8%8E%E6%A6%82%E7%8E%87%E6%9C%9F%E6%9C%9B/" class="post-title-link" itemprop="url">组合数学与概率期望</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-07-31 11:12:51" itemprop="dateCreated datePublished" datetime="2023-07-31T11:12:51+08:00">2023-07-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-08-01 16:13:30" itemprop="dateModified" datetime="2023-08-01T16:13:30+08:00">2023-08-01</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="乘法逆元"><a href="#乘法逆元" class="headerlink" title="乘法逆元"></a>乘法逆元</h2><p>首先，乘法逆元定义为<br>$$<br>ax \equiv 1(mod n)<br>$$<br>其中的 $x$ 我们称为a的逆元，写作 $a^{-1}$ ，那么它有什么用呢，当我们需要对除法运算取模时，就可以转而对逆元取模</p>
+<h3 id="拓展欧几里得算法求逆元"><a href="#拓展欧几里得算法求逆元" class="headerlink" title="拓展欧几里得算法求逆元"></a>拓展欧几里得算法求逆元</h3><p>朴素的欧几里得算法可以快速求gcd，另外对其进行一定拓展可以用来求逆元，而且相对于下面的快速幂法求逆元，它不要求n是质数。</p>
+<p>在求gcd的过程中，本质上我们得到了一系列的等式。<br>$$<br>a &#x3D; k_1 \times b + r_1\newline<br>b &#x3D; k_2 \times r_1 + r_2\newline<br>\dotsb\newline<br>r_{i - 2} &#x3D; k_i \times r_{i - 1} + r_i\newline<br>$$<br>若ab互质，我们收集这个等式向上递归，就可以得到ax+by&#x3D;1这样的等式，逆元也就可以求出来了。</p>
+<p>但还是过于抽象，我们试着分析一个具体的例子</p>
+<p>我们求177x+29y&#x3D;1的整数解</p>
+<p>177 &#x3D; 29 * 6 + 3</p>
+<p>29 &#x3D; 3 * 9 + 2</p>
+<p>3 &#x3D; 2 * 1 + 1</p>
+<p>2 &#x3D; 1 * 2 + 0</p>
+<p>倒数第二个式子可以变形为1 &#x3D; 2 * 1 - 3，第二个式子意味着2 &#x3D; 29 - 3 * 9，第一个式子意味着3 &#x3D; 177 - 29 * 6，这样我们不断地把前面的式子变形，代入后面的式子，就能得到1 &#x3D; 177 * 10 - 29 * 59</p>
+<p>接下来我们尝试推出一个传递式，帮助我们更好地编写代码</p>
+<p>设ax1 + by1 &#x3D; gcd(a,b)，bx2 + (a % b)y2 &#x3D; gcd(b , a % b)，这是我们求gcd的时候常用的递归顺序，已知gcd(a,b) &#x3D; gcd(b, a % b)，就有ax1 + by1 &#x3D; bx2 + (a % b)y2</p>
+<p>$$<br>ax_1 + by_1 &#x3D; bx_2 + (a - \lfloor\frac{a}{b}\rfloor \times b)y_2\newline<br>ax_1 + by_1 &#x3D; ay_2 + b(x_2 - \lfloor\frac{a}{b}\rfloor)<br>$$<br>根据恒等定理可得$x_1 &#x3D; y_2$， $y_1 &#x3D; x_2 - \lfloor\frac{a}{b}\rfloor$，代码如下</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">exgcd</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b, <span class="type">int</span>&amp; x, <span class="type">int</span>&amp; y)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (b == <span class="number">0</span>) &#123;</span><br><span class="line">    x = <span class="number">1</span>, y = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="built_in">exgcd</span>(b, a % b, y, x);</span><br><span class="line">  y -= a / b * x;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="快速幂求逆元"><a href="#快速幂求逆元" class="headerlink" title="快速幂求逆元"></a>快速幂求逆元</h3><p>快速幂求逆元比拓展欧几里得要好理解一些，<del>因为我们可以选择不用理解费马小定理</del></p>
+<h4 id="费马小定理"><a href="#费马小定理" class="headerlink" title="费马小定理"></a>费马小定理</h4><p>当p为质数时，对任意自然数a，均有<br>$$<br>a^p \equiv a(mod p)<br>$$<br>变形后得<br>$$<br>a ^ {p - 2} \times a \equiv 1(mod p)<br>$$<br>那么 $a^{p - 2}$ 就是 $a$ 的乘法逆元，这个方法需要确保p是质数，而求逆元只需要用快速幂求出即可</p>
+<h3 id="线性递推"><a href="#线性递推" class="headerlink" title="线性递推"></a>线性递推</h3><p>当需要求一系列数的逆元时，以上两种方法复杂度就不太优秀，可以使用线性递推的方式求逆元<br>$$<br>ki + r \equiv 0(\bmod p)<br>\newline<br>左右同时乘i^{-1},r^{-1}\rightarrow<br>i^{-1} \equiv -kr^{-1}(\bmod p)<br>\newline<br>i^{-1} \equiv -(\lfloor \frac{p}{i} \rfloor)\times (p %i)^{-1} (\bmod p)<br>$$<br>初始条件<br>$$1^{-1} \equiv 1(\bmod p)$$</p>
+<p>线性求逆元代码</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ans[<span class="number">1</span>] = <span class="number">1</span>;</span><br><span class="line"><span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">2</span>; i &lt;= n; i++)&#123;</span><br><span class="line">  ans[i] = (p - p  / i) * ans[p % i] % p;<span class="comment">//p - (p / i)可以保证不出现负数</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="卢卡斯定理"><a href="#卢卡斯定理" class="headerlink" title="卢卡斯定理"></a>卢卡斯定理</h2><p>卢卡斯定理可以用来求出较大的组合数，可以通过预处理阶乘以及配合前面的求逆元达到不错的效果</p>
+<p>$$<br>{n \choose m} &#x3D; {n \bmod p \choose m \bmod p} \times {\lfloor \frac{n}{p} \rfloor \choose \lfloor \frac{m}{p}\rfloor}(\bmod p)<br>$$<br>后面的可以递归来求，前面的直接预处理出来就可以</p>
+<p>逆元在求组合数时就发挥了作用，在组合数公式中<br>$$<br>{n \choose m} &#x3D; \frac{n!}{m! \times (n - m)!}<br>$$<br>我们需要进行除法运算，但同时又要取模，这时候我们就可以把除法转变成乘以它的逆元，这样取模运算就方便多了。</p>
+<h3 id="卢卡斯定理模板题"><a href="#卢卡斯定理模板题" class="headerlink" title="卢卡斯定理模板题"></a>卢卡斯定理模板题</h3><blockquote>
+<p>洛谷 P3807</p>
+</blockquote>
+<blockquote>
+<p>给定整数n，m，p的值，求出 $C^{n}_{n+m} \bmod p$ 的值</p>
+</blockquote>
+<blockquote>
+<p>保证p为质数</p>
+</blockquote>
+<blockquote>
+<p>对于100%的数据，$1 \leq n,m,p \leq 10^5, 1 \leq T \leq 10$</p>
+</blockquote>
+<p>T是数据组数，代码如下</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="comment">//卢卡斯定理</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> MAXN 100010</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> MAXP 100010</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="keyword">using</span> ll = <span class="type">long</span> <span class="type">long</span>;</span><br><span class="line">ll p;</span><br><span class="line">ll n,m;</span><br><span class="line">ll f[MAXP];</span><br><span class="line"><span class="function">ll <span class="title">qpow</span><span class="params">(ll a,ll p)</span></span>&#123;</span><br><span class="line">    ll ans = <span class="number">1</span>;</span><br><span class="line">    ll pp = p;</span><br><span class="line">    pp -= <span class="number">2</span>;</span><br><span class="line">    <span class="keyword">while</span>(pp)&#123;</span><br><span class="line">        <span class="keyword">if</span>(pp&amp;<span class="number">1</span>)&#123;ans *= a;ans %= p;&#125;</span><br><span class="line">        a = (a * a) % p;</span><br><span class="line">        pp &gt;&gt;= <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> ans;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function">ll <span class="title">C</span><span class="params">(ll n, ll m)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(n &lt; m)<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">return</span> f[n] * <span class="built_in">qpow</span>(f[m],p) % p * <span class="built_in">qpow</span>(f[n - m],p) % p;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function">ll <span class="title">lucas</span><span class="params">(ll n, ll m, ll p)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(m == <span class="number">0</span>)<span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">C</span>(n % p,m % p) % p * <span class="built_in">lucas</span>(n / p, m / p,p) % p;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    ios::<span class="built_in">sync_with_stdio</span>(<span class="literal">false</span>);</span><br><span class="line">    cin.<span class="built_in">tie</span>(<span class="number">0</span>);</span><br><span class="line">    ll t = <span class="number">0</span>;</span><br><span class="line">    cin &gt;&gt; t;</span><br><span class="line">    <span class="keyword">while</span>(t--)&#123;</span><br><span class="line">        cin &gt;&gt; n &gt;&gt; m &gt;&gt; p;</span><br><span class="line">        f[<span class="number">0</span>] = f[<span class="number">1</span>] = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">2</span>; i &lt;= p; i++)&#123;</span><br><span class="line">            f[i] = f[i - <span class="number">1</span>] * i;</span><br><span class="line">            f[i] %= p;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%lld\n&quot;</span>,<span class="built_in">lucas</span>(n + m, n ,p));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://ikklos.github.io/2023/07/26/%E5%80%8D%E5%A2%9E%E6%80%9D%E6%83%B3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/ikklo.jpg">
+      <meta itemprop="name" content="爱斯基摩咸鱼">
+      <meta itemprop="description" content="路漫漫其修远兮，吾将上下而求索">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="爱斯基摩咸鱼历险记">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2023/07/26/%E5%80%8D%E5%A2%9E%E6%80%9D%E6%83%B3/" class="post-title-link" itemprop="url">倍增思想</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-07-26 09:41:41" itemprop="dateCreated datePublished" datetime="2023-07-26T09:41:41+08:00">2023-07-26</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-08-01 16:13:35" itemprop="dateModified" datetime="2023-08-01T16:13:35+08:00">2023-08-01</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://ikklos.github.io/2023/07/24/%E5%88%B7%E9%A2%98%E7%AC%94%E8%AE%B0%EF%BC%9A%E5%86%B3%E7%AD%96%E5%8D%95%E8%B0%83%E6%80%A7/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/ikklo.jpg">
+      <meta itemprop="name" content="爱斯基摩咸鱼">
+      <meta itemprop="description" content="路漫漫其修远兮，吾将上下而求索">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="爱斯基摩咸鱼历险记">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2023/07/24/%E5%88%B7%E9%A2%98%E7%AC%94%E8%AE%B0%EF%BC%9A%E5%86%B3%E7%AD%96%E5%8D%95%E8%B0%83%E6%80%A7/" class="post-title-link" itemprop="url">刷题笔记：决策单调性</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-07-24 22:45:19" itemprop="dateCreated datePublished" datetime="2023-07-24T22:45:19+08:00">2023-07-24</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-08-01 16:13:33" itemprop="dateModified" datetime="2023-08-01T16:13:33+08:00">2023-08-01</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="决策单调性"><a href="#决策单调性" class="headerlink" title="决策单调性"></a>决策单调性</h1><p>一般我们列转移方程的时候可能会碰到这种方程</p>
+<p>$$<br>f_i,_j  &#x3D; max(f_i,<em>k + g</em>{k+1,j})<br>$$</p>
+<p>中间的k我们一般叫做 <strong>决策点</strong> ，如果暴力枚举决策点，可能会导致很高的复杂度，这是我们不能接受的</p>
+<hr>
+<p>但是如果这个决策点有单调性，那就是另一回事了，如果对于i+1，它的最优决策点不小于i的最优决策点，我们称它有决策单调性，那么就可以使用log的算法找这个决策点了</p>
+<p>更直观地，如果i的决策点是k，那么决策点所在的区间就被分成了两份，左边的一定包含i左边的决策点，右边的一定包含i右边的决策点，对决策区间和i的区间不断二分即可。</p>
+<h2 id="例题1：邮局"><a href="#例题1：邮局" class="headerlink" title="例题1：邮局"></a>例题1：邮局</h2><blockquote>
+<p>高速公路旁边有一些村庄。高速公路表示为整数轴，每个村庄的位置用单个整数坐标标识。没有两个在同样地方的村庄。两个位置之间的距离是其整数坐标差的绝对值。<br>邮局将建在一些，但不一定是所有的村庄中。为了建立邮局，应选择他们建造的位置，使每个村庄与其最近的邮局之间的距离总和最小。你要编写一个程序，已知村庄的位置和邮局的数量，计算每个村庄和最近的邮局之间所有距离的最小可能的总和。</p>
+</blockquote>
+<blockquote>
+<p>输入：第一行包含两个整数：第一个是村庄V 的数量，第二个是邮局的数量P。第二行包含V 个整数。这些整数是村庄的位置。</p>
+</blockquote>
+<p>列出转移方程：<br>$$<br>f_{i,j} &#x3D; min( f_{k,j - 1} +  w_{k + 1, i})<br>$$<br>其中 $f_{i,j}$ 代表在1到i村庄中建j个邮局的最小距离总和, $w_{i,j}$ 代表在ij之间建一个邮局的距离总和</p>
+<p>我们可以感觉到它可能具有决策单调性，我们可以尝试去证明它，如果对于i+1，它的最优决策点在i之前，会发生什么</p>
+<p>我们应该就可以得到这样的式子<br>$$<br>f_{k,j - 1} + w_{k + 1,i + 1} &gt; f_{k_2,j - 1} + w_{k_2 + 1, i + 1}<br>$$<br>$$<br>f_{k,j - 1} - f_{k_2,j - 1} &gt;w_{k_2 + 1, i + 1} -  w_{k + 1,i + 1}<br>$$<br>如果我们要证矛盾，这时应该考虑i了，如果对i得到上式，就证明k不是i的最优决策点，可以轻松证出矛盾，那么关键点就在于我们能不能得到下式<br>$$<br>w_{k_2 + 1, i + 1} -  w_{k + 1,i + 1} \geq w_{k_2 + 1, i} -  w_{k + 1,i}<br>$$<br>在此之前，我们默认在一个区间内，放一个邮局的情况，放在中位数是最优的，实际上也是如此，那么就得到<br>$$<br>w_{i,j} &#x3D; w_{i,j - 1} + d_{j,\frac{i + j}{2}}<br>$$<br>$$<br>w_{i - 1, j} &#x3D; w_{i - 1, j - 1} + d_{j,\frac{i + j - 1}{2}}<br>$$<br>移项相减得<br>$$<br>w_{i,j} + w_{i - 1,j - 1} - w_{i,j - 1} - w_{i - 1, j} \leq 0<br>$$<br>也就得到上面的式子，决策单调性得证。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
       
   
   
@@ -255,10 +597,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2023-02-20 14:24:46 / 修改时间：23:37:30" itemprop="dateCreated datePublished" datetime="2023-02-20T14:24:46+08:00">2023-02-20</time>
+              <time title="创建时间：2023-02-20 14:24:46" itemprop="dateCreated datePublished" datetime="2023-02-20T14:24:46+08:00">2023-02-20</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-08-01 16:13:37" itemprop="dateModified" datetime="2023-08-01T16:13:37+08:00">2023-08-01</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -370,7 +718,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-02-20 23:37:04" itemprop="dateModified" datetime="2023-02-20T23:37:04+08:00">2023-02-20</time>
+                <time title="修改时间：2023-08-01 16:13:36" itemprop="dateModified" datetime="2023-08-01T16:13:36+08:00">2023-08-01</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -459,7 +807,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-02-20 23:36:43" itemprop="dateModified" datetime="2023-02-20T23:36:43+08:00">2023-02-20</time>
+                <time title="修改时间：2023-08-01 16:13:34" itemprop="dateModified" datetime="2023-08-01T16:13:34+08:00">2023-08-01</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -1114,7 +1462,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">7</span>
+          <span class="site-state-item-count">11</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1127,7 +1475,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-count">6</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>

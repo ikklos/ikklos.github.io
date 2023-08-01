@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"ikklos.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="斜率优化斜率优化与决策单调性一样，都是在决策点上做文章，但斜率优化需要更多推导，常见的方式是，我们假设后面的点比前面的点更优，推导出一个类似斜率的式子，就像$slope_{i,i+1} &lt; p$或者类似的形式，然后我们只需要维护一个凸包即可，用具体的例子可能更好理解  洛谷P3648 序列分割   你正在玩一个关于长度为n的非负整数序列的游戏。这个游戏中你需要把序列分成k+1个非空的块。为了">
+<meta property="og:type" content="article">
+<meta property="og:title" content="斜率优化dp">
+<meta property="og:url" content="http://ikklos.github.io/2023/08/01/%E6%96%9C%E7%8E%87%E4%BC%98%E5%8C%96dp/index.html">
+<meta property="og:site_name" content="爱斯基摩咸鱼历险记">
+<meta property="og:description" content="斜率优化斜率优化与决策单调性一样，都是在决策点上做文章，但斜率优化需要更多推导，常见的方式是，我们假设后面的点比前面的点更优，推导出一个类似斜率的式子，就像$slope_{i,i+1} &lt; p$或者类似的形式，然后我们只需要维护一个凸包即可，用具体的例子可能更好理解  洛谷P3648 序列分割   你正在玩一个关于长度为n的非负整数序列的游戏。这个游戏中你需要把序列分成k+1个非空的块。为了">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://ikklos.github.io/2023/08/01/%E6%96%9C%E7%8E%87%E4%BC%98%E5%8C%96dp/1.png">
+<meta property="article:published_time" content="2023-08-01T06:39:29.000Z">
+<meta property="article:modified_time" content="2023-08-01T08:13:32.408Z">
+<meta property="article:author" content="爱斯基摩咸鱼">
+<meta property="article:tag" content="算法竞赛">
+<meta property="article:tag" content="dp">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://ikklos.github.io/2023/08/01/%E6%96%9C%E7%8E%87%E4%BC%98%E5%8C%96dp/1.png">
+
+<link rel="canonical" href="http://ikklos.github.io/2023/08/01/%E6%96%9C%E7%8E%87%E4%BC%98%E5%8C%96dp/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>斜率优化dp | 爱斯基摩咸鱼历险记</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">爱斯基摩咸鱼历险记</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">6</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">3</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">11</span></a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://ikklos.github.io/2023/08/01/%E6%96%9C%E7%8E%87%E4%BC%98%E5%8C%96dp/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/ikklo.jpg">
+      <meta itemprop="name" content="爱斯基摩咸鱼">
+      <meta itemprop="description" content="路漫漫其修远兮，吾将上下而求索">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="爱斯基摩咸鱼历险记">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          斜率优化dp
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2023-08-01 14:39:29 / 修改时间：16:13:32" itemprop="dateCreated datePublished" datetime="2023-08-01T14:39:29+08:00">2023-08-01</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="斜率优化"><a href="#斜率优化" class="headerlink" title="斜率优化"></a>斜率优化</h1><p>斜率优化与决策单调性一样，都是在决策点上做文章，但斜率优化需要更多推导，常见的方式是，我们假设后面的点比前面的点更优，推导出一个类似斜率的式子，就像$slope_{i,i+1} &lt; p$或者类似的形式，然后我们只需要维护一个凸包即可，用具体的例子可能更好理解</p>
+<blockquote>
+<p>洛谷P3648 序列分割</p>
+</blockquote>
+<blockquote>
+<p>你正在玩一个关于长度为n的非负整数序列的游戏。这个游戏中你需要把序列分成k+1个非空的块。为了得到k+1块，你需要重复下面的操作k次</p>
+</blockquote>
+<blockquote>
+<p>选择一个有超过一个元素的块（初始时你只有一块，即整个序列</p>
+</blockquote>
+<blockquote>
+<p>选择两个相邻元素把这个块从中间分开，得到两个非空的块。</p>
+</blockquote>
+<blockquote>
+<p>每次操作后你将获得那两个新产生的块的元素和的乘积的分数。你想要最大化最后的总得分。</p>
+</blockquote>
+<p>当我们试图对整个序列进行上述操作时，如果我们只着眼于最后一块的某个元素，我们发现它与前面的块中的所有的数都乘了一遍，无论分割顺序如何。这样我们就可以列出转移方程</p>
+<p>我们设 $dp_{i,j}$ 为只考虑前i个元素，分成j块，我们得到的最大分数，$sum$ 为区间和，转移方程如下</p>
+<p>$$<br>dp_{i,j} &#x3D; \max(dp_{k,j - 1} + sum(k + 1,i)\times sum(1,k))<br>$$</p>
+<p>很明显，找决策点k的方式是需要优化的地方，暴力寻找决策点只会导致 $O(n^2m)$ 的复杂度，我们尝试寻找决策点的性质</p>
+<p>我们以 $g_k$ 替代 $dp_{k,j - 1}$ ,假设k+1比k更优，则有</p>
+<p>$$<br>g_{k + 1} + sum(k + 2,i) \times sum(1,k+1) &gt; g_{k} + sum(k + 1,i) \times sum(1,k)<br>\newline<br>g_{k + 1} + (S_i - S_{k + 1}) \times S_{k+1} &gt; g_{k} + (S_i - S_{k}) \times S_k<br>\newline<br>\frac{(g_{k + 1} - S_{k + 1}^2) - (g_k - S_{k}^2)}{(-S_{k + 1}) - (-S_k)} &lt; S_i<br>$$<br>对于最后的式子，如果我们对于每个点，以点坐标的形式存储 $(-S_k,g_k - S_{k + 1}^2)$ 那么如果斜率符合上式，则证明后面的决策点更优，对于每一个 $f_{i,j}$ 我们只需要动态维护凸包即可，就像求极值点一样，取斜率最大的小于 $S_i$ 的点，就是它的最优决策点。</p>
+<p>代码如下，虽然可能与上面最后的式子有所不同，但本质上是相同的</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;bits\stdc++.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> MAXN 100010</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> MAXK 205</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> INF 0x3f3f3f3f</span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="keyword">using</span> ll = <span class="type">long</span> <span class="type">long</span>;</span><br><span class="line"><span class="keyword">typedef</span> <span class="type">long</span> <span class="type">double</span> lD;</span><br><span class="line"><span class="type">const</span> <span class="type">double</span> emp = <span class="number">1e-9</span>;</span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="type">bool</span> <span class="title">isbigger</span><span class="params">(<span class="type">double</span> a, <span class="type">double</span> b)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(a - b &gt;= <span class="number">0</span>)<span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">node</span>&#123;</span><br><span class="line">    ll x,y;</span><br><span class="line">    <span class="built_in">node</span>()&#123;&#125;</span><br><span class="line">    <span class="built_in">node</span>(ll x, ll y):<span class="built_in">x</span>(x),<span class="built_in">y</span>(y)&#123;&#125;</span><br><span class="line">&#125;;</span><br><span class="line">ll S[MAXN];</span><br><span class="line">ll dp[MAXN][MAXK];</span><br><span class="line"><span class="type">int</span> d[MAXN][MAXK];</span><br><span class="line">node q[MAXN];</span><br><span class="line"><span class="type">int</span> ids[MAXN];</span><br><span class="line"><span class="type">int</span> lp,rp;</span><br><span class="line"><span class="type">int</span> n,k;</span><br><span class="line"><span class="function"><span class="keyword">inline</span> lD <span class="title">slope</span><span class="params">(node n, node n2)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(<span class="built_in">abs</span>(n2.x - n.x) == <span class="number">0</span>)<span class="keyword">return</span> INF;</span><br><span class="line">    <span class="keyword">return</span> ((lD)n2.y - (lD)n.y) / ((lD)n2.x - (lD)n.x);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">out</span><span class="params">(<span class="type">int</span> k, <span class="type">int</span> id)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(k == <span class="number">0</span>)<span class="keyword">return</span>;</span><br><span class="line">    <span class="built_in">out</span>(k - <span class="number">1</span>,d[id][k - <span class="number">1</span>]);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d &quot;</span>,id);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d%d&quot;</span>,&amp;n,&amp;k);</span><br><span class="line">    S[<span class="number">0</span>] = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">1</span>; i &lt;= n; i++)&#123;</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%lld&quot;</span>,S + i);</span><br><span class="line">        S[i] += S[i - <span class="number">1</span>];</span><br><span class="line">    &#125;</span><br><span class="line">    lp = <span class="number">0</span>,rp = <span class="number">-1</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">1</span>;i &lt;= n; i++)&#123;</span><br><span class="line">        dp[i][<span class="number">1</span>] = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> j = <span class="number">1</span>; j &lt;= k; j++)&#123;</span><br><span class="line">        lp = <span class="number">0</span>, rp = <span class="number">-1</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">1</span>; i &lt;= n; i++)&#123;</span><br><span class="line">            </span><br><span class="line">            node x = &#123;-S[i],dp[i][j - <span class="number">1</span>] - S[i]*S[i]&#125;;</span><br><span class="line">            </span><br><span class="line">            <span class="keyword">while</span>(lp &lt; rp &amp;&amp; ((lD)S[i] &gt;= <span class="built_in">slope</span>(q[lp],q[lp + <span class="number">1</span>]) || ids[lp] &lt; j))lp++;<span class="comment">//如果斜率满足不等式，证明后面的点更优，那么前面的点直接抛弃即可</span></span><br><span class="line">            </span><br><span class="line">            <span class="comment">//cout &lt;&lt; ids[lp] &lt;&lt;&quot; &quot;&lt;&lt; i &lt;&lt;&quot; &quot;&lt;&lt; j &lt;&lt; endl;</span></span><br><span class="line">            dp[i][j] = q[lp].y - q[lp].x * S[i];</span><br><span class="line">            d[i][j] = ids[lp];</span><br><span class="line">            <span class="keyword">while</span>(lp &lt; rp &amp;&amp; <span class="built_in">slope</span>(q[rp - <span class="number">1</span>],q[rp]) &gt;= <span class="built_in">slope</span>(q[rp],x))&#123;</span><br><span class="line">                rp--;<span class="comment">//需要使其满足凸包性质</span></span><br><span class="line">            &#125;</span><br><span class="line">            ids[++rp] = i;</span><br><span class="line">            q[rp] = x;</span><br><span class="line">            </span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%lld\n&quot;</span>,dp[n][k]);</span><br><span class="line">    <span class="built_in">out</span>(k,d[n][k]);</span><br><span class="line">    <span class="built_in">puts</span>(<span class="string">&quot;&quot;</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="李超线段树"><a href="#李超线段树" class="headerlink" title="李超线段树"></a>李超线段树</h1><p>显然，李超线段树是一种线段树，<del>但它更加线段树</del>，它可以用来维护一大堆线段，并且可以支持单点查询，也就是给定一个点，它可以给出在这个点上所有线段的最大值。</p>
+<p>李超线段树是一种标记永久化线段树，也就是它并没有pushdown操作，在查询的时候，需要对路线上遇到的所有的线段取最大值。</p>
+<h2 id="更新（插入一条线段）"><a href="#更新（插入一条线段）" class="headerlink" title="更新（插入一条线段）"></a>更新（插入一条线段）</h2><p>我们称一条线段“控制”这个区间，当且仅当目前为止，对于在这个区间内的任意点，这条线段都在最上方，也就是最大值都在这条线段上。</p>
+<p>当需要在l，r中插入一条线段时，需要考虑这条线段L2与当前控制这个区间的线段L的位置关系，如果L2覆盖在L的上方，则更新这个区间，并结束向下递归，如果L覆盖在L2的上方，则不更新这个区间，也结束向下递归，如果两个线段交叉，则取mid&#x3D;(l+r)&gt;&gt;1，对左右区间递归。容易发现这个递归是一定可以结束的。</p>
+<p>可以结合下图理解（图片来源于oi-wiki）</p>
+<img src="/2023/08/01/%E6%96%9C%E7%8E%87%E4%BC%98%E5%8C%96dp/1.png" class="" title="LICHAO_Tree">
+
+<h2 id="查询"><a href="#查询" class="headerlink" title="查询"></a>查询</h2><p>查询操作也是递归完成的，直接查询并且对于经过的节点存储的线段取max即可，需要注意一些细节。</p>
+<h2 id="李超线段树实现"><a href="#李超线段树实现" class="headerlink" title="李超线段树实现"></a>李超线段树实现</h2><p>具体实现如下</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> MAXN 100010</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> MAXK 205</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> INF 0x3f3f3f3f</span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="keyword">using</span> ll = <span class="type">long</span> <span class="type">long</span>;</span><br><span class="line">ll dp[MAXN][MAXK];</span><br><span class="line"><span class="type">int</span> d[MAXN][MAXK];</span><br><span class="line">ll a[MAXN];</span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">line</span>&#123;<span class="comment">//线段</span></span><br><span class="line">    ll k,b;</span><br><span class="line">    <span class="type">int</span> id;</span><br><span class="line">    <span class="built_in">line</span>()&#123;&#125;</span><br><span class="line">    <span class="built_in">line</span>(ll k,ll b):<span class="built_in">k</span>(k),<span class="built_in">b</span>(b)&#123;&#125;</span><br><span class="line">    <span class="built_in">line</span>(ll k,ll b, <span class="type">int</span> id):<span class="built_in">k</span>(k),<span class="built_in">b</span>(b),<span class="built_in">id</span>(id)&#123;&#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="function">vector&lt;line&gt; <span class="title">tree</span><span class="params">(MAXN &lt;&lt; <span class="number">2</span>)</span></span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="type">void</span> <span class="title">upd</span><span class="params">(<span class="type">int</span> id, <span class="type">int</span> l2, <span class="type">int</span> r2, ll k, ll b, <span class="type">int</span> p)</span></span>&#123;<span class="comment">//更新某区间</span></span><br><span class="line">    line tag = tree[id];</span><br><span class="line">    <span class="keyword">if</span>(tag.k * a[l2] + tag.b &gt; k * a[l2] + b &amp;&amp; tag.k * a[r2] + tag.b &gt; k * a[r2] + b)<span class="keyword">return</span>;</span><br><span class="line">    <span class="keyword">if</span>(tag.k * a[l2] + tag.b &lt;= k * a[l2] + b &amp;&amp; tag.k * a[r2] + tag.b &lt;= k * a[r2] + b)&#123;</span><br><span class="line">        tree[id] = &#123;k,b,p&#125;;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(l2 == r2)<span class="keyword">return</span>;</span><br><span class="line">    <span class="built_in">upd</span>(id * <span class="number">2</span>,l2,(l2 + r2) &gt;&gt; <span class="number">1</span>,k,b,p);</span><br><span class="line">    <span class="built_in">upd</span>(id * <span class="number">2</span> + <span class="number">1</span>,((l2 + r2) &gt;&gt; <span class="number">1</span>) + <span class="number">1</span>,r2,k,b,p);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="type">void</span> <span class="title">update</span><span class="params">(<span class="type">int</span> id,<span class="type">int</span> l, <span class="type">int</span> r,<span class="type">int</span> l2,<span class="type">int</span> r2, ll k, ll b,<span class="type">int</span> p)</span></span>&#123;<span class="comment">//插入线段</span></span><br><span class="line">    <span class="keyword">if</span>(l2 &gt; r2)<span class="keyword">return</span>;</span><br><span class="line">    <span class="keyword">if</span>(r &lt; l2 || l &gt; r2)&#123;<span class="keyword">return</span>;&#125;</span><br><span class="line">    <span class="keyword">if</span>(l &gt;= l2 &amp;&amp; r &lt;= r2)&#123;</span><br><span class="line">        <span class="built_in">upd</span>(id,l,r,k,b,p);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">update</span>(<span class="number">2</span> * id, l , (l + r) &gt;&gt; <span class="number">1</span>, l2, r2, k, b,p);</span><br><span class="line">    <span class="built_in">update</span>(<span class="number">2</span> * id + <span class="number">1</span>, ((l + r) &gt;&gt; <span class="number">1</span>) + <span class="number">1</span>, r, l2, r2, k, b,p);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">inline</span> line <span class="title">pmax</span><span class="params">(line aa, line b, <span class="type">int</span> d)</span></span>&#123;<span class="comment">//比较两条线段，返回一条线段，这条线段在d点值更大</span></span><br><span class="line">    <span class="keyword">if</span>(aa.k * a[d] + aa.b &gt; b.k * a[d] + b.b)<span class="keyword">return</span> aa;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">return</span> b; </span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">inline</span> line <span class="title">query</span><span class="params">(<span class="type">int</span> id, <span class="type">int</span> l, <span class="type">int</span> r, <span class="type">int</span> d)</span></span>&#123;</span><br><span class="line">    <span class="type">int</span> mid = (l + r) &gt;&gt; <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">if</span>(r &lt; d || l &gt; d)<span class="keyword">return</span> &#123;-INF,-INF&#125;;</span><br><span class="line">    <span class="keyword">if</span>(l == r &amp;&amp; l == d)<span class="keyword">return</span> tree[id];</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">pmax</span>(tree[id],d &lt;= mid?<span class="built_in">query</span>(<span class="number">2</span> * id,l,mid,d):<span class="built_in">query</span>(<span class="number">2</span> * id + <span class="number">1</span>,mid + <span class="number">1</span>, r,d),d);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>对于插入操作，我们注意到，需要用两个函数，一个update函数用来寻找插入区间，另外一个upd函数用于更新，所以插入的时间复杂度为 $O(\log^2 n)$，查询的时间复杂度为 $O(\log n)$</p>
+<h2 id="李超线段树应用"><a href="#李超线段树应用" class="headerlink" title="李超线段树应用"></a>李超线段树应用</h2><p>我们再看上面的斜率优化的题目，我们想要让<br>$$<br>dp_{i,j} &#x3D; \max(dp_{k,j - 1} + sum(k + 1,i)\times sum(1,k))<br>$$<br>最大化，稍微变形一下</p>
+<p>$$<br>\max(g_k + S_i \times S_k - S_k^2)<br>\newline S_k \times S_i + g_k - S_k^2<br>\newline y &#x3D; S_k \times x + g_k - S_k^2<br>$$</p>
+<p>这就化成了线的形式，如果要求 $dp_{i,j}$ 我们只需要对于每一个 $dp_{k,j - 1}$ ，化为线段斜率和截距的形式，插入对应的区间，再对每一个 $S_i$ 求最优的线段即可，但是很遗憾，这道题的数据范围很大，李超线段树附加了log复杂度，所以并不能过这道题</p>
+<p>但是我还是写了很长时间一直在TLE，<del>最终得知过不了的时候我崩溃的同时也释然了</del></p>
+<p>所以李超线段树做法的代码如下</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> MAXN 100010</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> MAXK 205</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> INF 0x3f3f3f3f</span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="keyword">using</span> ll = <span class="type">long</span> <span class="type">long</span>;</span><br><span class="line">ll dp[MAXN][MAXK];</span><br><span class="line"><span class="type">int</span> d[MAXN][MAXK];</span><br><span class="line">ll a[MAXN];</span><br><span class="line"><span class="comment">//李超线段树,浮点运算需要比大小需要注意精度近似</span></span><br><span class="line"><span class="comment">//提示，这题过不了nklog</span></span><br><span class="line"><span class="comment">//写了也过不了哈哈哈</span></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">line</span>&#123;</span><br><span class="line">    ll k,b;</span><br><span class="line">    <span class="type">int</span> id;</span><br><span class="line">    <span class="built_in">line</span>()&#123;&#125;</span><br><span class="line">    <span class="built_in">line</span>(ll k,ll b):<span class="built_in">k</span>(k),<span class="built_in">b</span>(b)&#123;&#125;</span><br><span class="line">    <span class="built_in">line</span>(ll k,ll b, <span class="type">int</span> id):<span class="built_in">k</span>(k),<span class="built_in">b</span>(b),<span class="built_in">id</span>(id)&#123;&#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="function">vector&lt;line&gt; <span class="title">tree</span><span class="params">(MAXN &lt;&lt; <span class="number">2</span>)</span></span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="type">void</span> <span class="title">upd</span><span class="params">(<span class="type">int</span> id, <span class="type">int</span> l2, <span class="type">int</span> r2, ll k, ll b, <span class="type">int</span> p)</span></span>&#123;</span><br><span class="line">    line tag = tree[id];</span><br><span class="line">    <span class="keyword">if</span>(tag.k * a[l2] + tag.b &gt; k * a[l2] + b &amp;&amp; tag.k * a[r2] + tag.b &gt; k * a[r2] + b)<span class="keyword">return</span>;</span><br><span class="line">    <span class="keyword">if</span>(tag.k * a[l2] + tag.b &lt;= k * a[l2] + b &amp;&amp; tag.k * a[r2] + tag.b &lt;= k * a[r2] + b)&#123;</span><br><span class="line">        tree[id] = &#123;k,b,p&#125;;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(l2 == r2)<span class="keyword">return</span>;</span><br><span class="line">    <span class="built_in">upd</span>(id * <span class="number">2</span>,l2,(l2 + r2) &gt;&gt; <span class="number">1</span>,k,b,p);</span><br><span class="line">    <span class="built_in">upd</span>(id * <span class="number">2</span> + <span class="number">1</span>,((l2 + r2) &gt;&gt; <span class="number">1</span>) + <span class="number">1</span>,r2,k,b,p);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="type">void</span> <span class="title">update</span><span class="params">(<span class="type">int</span> id,<span class="type">int</span> l, <span class="type">int</span> r,<span class="type">int</span> l2,<span class="type">int</span> r2, ll k, ll b,<span class="type">int</span> p)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(l2 &gt; r2)<span class="keyword">return</span>;</span><br><span class="line">    <span class="keyword">if</span>(r &lt; l2 || l &gt; r2)&#123;<span class="keyword">return</span>;&#125;</span><br><span class="line">    <span class="keyword">if</span>(l &gt;= l2 &amp;&amp; r &lt;= r2)&#123;</span><br><span class="line">        <span class="built_in">upd</span>(id,l,r,k,b,p);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">update</span>(<span class="number">2</span> * id, l , (l + r) &gt;&gt; <span class="number">1</span>, l2, r2, k, b,p);</span><br><span class="line">    <span class="built_in">update</span>(<span class="number">2</span> * id + <span class="number">1</span>, ((l + r) &gt;&gt; <span class="number">1</span>) + <span class="number">1</span>, r, l2, r2, k, b,p);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">inline</span> line <span class="title">pmax</span><span class="params">(line aa, line b, <span class="type">int</span> d)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(aa.k * a[d] + aa.b &gt; b.k * a[d] + b.b)<span class="keyword">return</span> aa;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">return</span> b; </span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">inline</span> line <span class="title">query</span><span class="params">(<span class="type">int</span> id, <span class="type">int</span> l, <span class="type">int</span> r, <span class="type">int</span> d)</span></span>&#123;</span><br><span class="line">    <span class="type">int</span> mid = (l + r) &gt;&gt; <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">if</span>(r &lt; d || l &gt; d)<span class="keyword">return</span> &#123;-INF,-INF&#125;;</span><br><span class="line">    <span class="keyword">if</span>(l == r &amp;&amp; l == d)<span class="keyword">return</span> tree[id];</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">pmax</span>(tree[id],d &lt;= mid?<span class="built_in">query</span>(<span class="number">2</span> * id,l,mid,d):<span class="built_in">query</span>(<span class="number">2</span> * id + <span class="number">1</span>,mid + <span class="number">1</span>, r,d),d);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">out</span><span class="params">(<span class="type">int</span> k, <span class="type">int</span> id)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(k == <span class="number">0</span>)<span class="keyword">return</span>;</span><br><span class="line">    <span class="built_in">out</span>(k - <span class="number">1</span>,d[id][k - <span class="number">1</span>]);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d &quot;</span>,id);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">////////////////////////////////////////////////</span></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="type">int</span> n, k;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d%d&quot;</span>,&amp;n,&amp;k);</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">1</span>; i &lt;= n; i++)&#123;</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%lld&quot;</span>,a + i);</span><br><span class="line">        a[i] += a[i - <span class="number">1</span>];</span><br><span class="line">    &#125;</span><br><span class="line">    line l;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">1</span>; i &lt;= n &lt;&lt; <span class="number">2</span>; i++)&#123;</span><br><span class="line">        tree[i] = &#123;-INF,-INF,<span class="number">0</span>&#125;;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">1</span>; i &lt;= n; i++)&#123;</span><br><span class="line">        <span class="built_in">update</span>(<span class="number">1</span>,<span class="number">1</span>,n,i + <span class="number">1</span>,n,a[i],- a[i] * a[i],i);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> j = <span class="number">1</span>; j &lt;= k; j++)&#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">1</span>; i &lt;= n; i++)&#123;</span><br><span class="line">            <span class="built_in">update</span>(<span class="number">1</span>,<span class="number">1</span>,n,i + <span class="number">1</span>,n,a[i],dp[i][j - <span class="number">1</span>] - a[i] * a[i],i);</span><br><span class="line">            l = <span class="built_in">query</span>(<span class="number">1</span>,<span class="number">1</span>,n,i);</span><br><span class="line">            dp[i][j] = l.k * a[i] + l.b;</span><br><span class="line">            d[i][j] = l.id;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%lld\n&quot;</span>,dp[n][k]);</span><br><span class="line">    <span class="built_in">out</span>(k,d[n][k]);</span><br><span class="line">    <span class="built_in">puts</span>(<span class="string">&quot;&quot;</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E7%AE%97%E6%B3%95%E7%AB%9E%E8%B5%9B/" rel="tag"># 算法竞赛</a>
+              <a href="/tags/dp/" rel="tag"># dp</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2023/07/31/%E7%BB%84%E5%90%88%E6%95%B0%E5%AD%A6%E4%B8%8E%E6%A6%82%E7%8E%87%E6%9C%9F%E6%9C%9B/" rel="prev" title="组合数学与概率期望">
+      <i class="fa fa-chevron-left"></i> 组合数学与概率期望
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%96%9C%E7%8E%87%E4%BC%98%E5%8C%96"><span class="nav-number">1.</span> <span class="nav-text">斜率优化</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9D%8E%E8%B6%85%E7%BA%BF%E6%AE%B5%E6%A0%91"><span class="nav-number">2.</span> <span class="nav-text">李超线段树</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9B%B4%E6%96%B0%EF%BC%88%E6%8F%92%E5%85%A5%E4%B8%80%E6%9D%A1%E7%BA%BF%E6%AE%B5%EF%BC%89"><span class="nav-number">2.1.</span> <span class="nav-text">更新（插入一条线段）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9F%A5%E8%AF%A2"><span class="nav-number">2.2.</span> <span class="nav-text">查询</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9D%8E%E8%B6%85%E7%BA%BF%E6%AE%B5%E6%A0%91%E5%AE%9E%E7%8E%B0"><span class="nav-number">2.3.</span> <span class="nav-text">李超线段树实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9D%8E%E8%B6%85%E7%BA%BF%E6%AE%B5%E6%A0%91%E5%BA%94%E7%94%A8"><span class="nav-number">2.4.</span> <span class="nav-text">李超线段树应用</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="爱斯基摩咸鱼"
+      src="/images/ikklo.jpg">
+  <p class="site-author-name" itemprop="name">爱斯基摩咸鱼</p>
+  <div class="site-description" itemprop="description">路漫漫其修远兮，吾将上下而求索</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">11</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">爱斯基摩咸鱼</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
