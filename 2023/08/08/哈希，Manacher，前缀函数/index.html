@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"ikklos.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="字符串哈希 常用于比较两个字符串，通常判断时我们会从第一位枚举到最后一位，但在我们需要重复执行此操作的情况下，每次都这样做显然是低效的。想到两个数字作比较十分方便，我们考虑将字符串映射成一个26进制的数(注意此处，不一定是26进制，这取决于我们要处理的字符串包含的字符种类，这里只是打个比方)，但新的问题又出现了。 我们常用的整数类型，如果要存储一个26进制的大数，显然是不现实的，我们一定要进行">
+<meta property="og:type" content="article">
+<meta property="og:title" content="哈希，Manacher，前缀函数">
+<meta property="og:url" content="http://ikklos.github.io/2023/08/08/%E5%93%88%E5%B8%8C%EF%BC%8CManacher%EF%BC%8C%E5%89%8D%E7%BC%80%E5%87%BD%E6%95%B0/index.html">
+<meta property="og:site_name" content="爱斯基摩咸鱼历险记">
+<meta property="og:description" content="字符串哈希 常用于比较两个字符串，通常判断时我们会从第一位枚举到最后一位，但在我们需要重复执行此操作的情况下，每次都这样做显然是低效的。想到两个数字作比较十分方便，我们考虑将字符串映射成一个26进制的数(注意此处，不一定是26进制，这取决于我们要处理的字符串包含的字符种类，这里只是打个比方)，但新的问题又出现了。 我们常用的整数类型，如果要存储一个26进制的大数，显然是不现实的，我们一定要进行">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-08-08T01:48:07.000Z">
+<meta property="article:modified_time" content="2023-08-11T01:15:42.955Z">
+<meta property="article:author" content="爱斯基摩咸鱼">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://ikklos.github.io/2023/08/08/%E5%93%88%E5%B8%8C%EF%BC%8CManacher%EF%BC%8C%E5%89%8D%E7%BC%80%E5%87%BD%E6%95%B0/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>哈希，Manacher，前缀函数 | 爱斯基摩咸鱼历险记</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">爱斯基摩咸鱼历险记</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">6</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">3</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">12</span></a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://ikklos.github.io/2023/08/08/%E5%93%88%E5%B8%8C%EF%BC%8CManacher%EF%BC%8C%E5%89%8D%E7%BC%80%E5%87%BD%E6%95%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/ikklo.jpg">
+      <meta itemprop="name" content="爱斯基摩咸鱼">
+      <meta itemprop="description" content="路漫漫其修远兮，吾将上下而求索">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="爱斯基摩咸鱼历险记">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          哈希，Manacher，前缀函数
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-08-08 09:48:07" itemprop="dateCreated datePublished" datetime="2023-08-08T09:48:07+08:00">2023-08-08</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-08-11 09:15:42" itemprop="dateModified" datetime="2023-08-11T09:15:42+08:00">2023-08-11</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="字符串哈希">字符串哈希</h1>
+<p>常用于比较两个字符串，通常判断时我们会从第一位枚举到最后一位，但在我们需要重复执行此操作的情况下，每次都这样做显然是低效的。想到两个数字作比较十分方便，我们考虑将字符串映射成一个26进制的数(注意此处，不一定是26进制，这取决于我们要处理的字符串包含的字符种类，这里只是打个比方)，但新的问题又出现了。</p>
+<p>我们常用的整数类型，如果要存储一个26进制的大数，显然是不现实的，我们一定要进行取模操作，但这样就会导致不准确，这是必然的，因为我们把它们压缩到了很小的数据范围内，很显然这个范围并不能表示所有可能的字符串，就会出现两个字符串不相等，但通过取模之后得到的数字相等。但我们想让它犯错的可能性尽可能小，考虑仅对一个大质数取模，比如MOD
+= 1e9+7，那么通过概率分析的方法可以得到：两个字符串不冲突的概率为(MOD -
+1)/(MOD)，看起来基本不可能冲突，但我们通常要存储更多字符串，那么n个不相等的字符串中，不冲突的概率为
+<span class="math display">\[
+\frac{MOD \times (MOD - 1) \times (MOD - 2) \times \dots}{MOD^n}
+\]</span> 通过简单的分析可知它下降得很快，实际上，在 <span
+class="math inline">\(10^6\)</span> 量级时它基本可以看作是0了，注意这是
+<strong>不冲突</strong>
+的概率，也就是几乎一定会发生冲突。但如果我们分别对两个大质数取模，比如分别对1e9+7和1e9+1取模，我们会得到两个答案，当这两个答案均相等时我们才认定这两个字符串的原串相等，这么做似乎很简单粗暴，但不冲突的概率却大大提升，因为哈希函数可以表示的值域变成两者之积了，当然我们可以对更多大质数取模来使它更准确，但一般没必要这么做，因为对两个大质数取模的做法在
+<span class="math inline">\(10 ^ 6\)</span>
+量级已经可以接近100%不冲突了。</p>
+<p>代码十分简单粗暴。 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> MODF 1000000007</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> MODS 1000000009</span></span><br><span class="line"><span class="comment">//哈希模板</span></span><br><span class="line"><span class="comment">//这个313是随便取的质数，理论上来讲</span></span><br><span class="line"><span class="comment">//只要比字符集的大小大一点就可以</span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="keyword">using</span> ll = <span class="type">long</span> <span class="type">long</span>;</span><br><span class="line"><span class="type">char</span> str[MAXM];</span><br><span class="line">map&lt;pair&lt;ll,ll&gt;,<span class="type">bool</span>&gt; vis;</span><br><span class="line"><span class="function">pair&lt;ll,ll&gt; <span class="title">mhash</span><span class="params">(ll len)</span></span>&#123;</span><br><span class="line">    ll number_f = <span class="number">0</span>, number_s = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(ll i = <span class="number">0</span>; i &lt; len; i++)&#123;</span><br><span class="line">        number_f *= <span class="number">313</span>;number_f %= MODF;</span><br><span class="line">        number_f += str[i];number_f %= MODF;</span><br><span class="line">        number_s *= <span class="number">313</span>;number_s %= MODS;</span><br><span class="line">        number_s += str[i];number_s %= MODS;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">make_pair</span>(number_f,number_s);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h1 id="前缀函数">前缀函数</h1>
+<h3 id="定义">定义</h3>
+<p>前缀函数 <span class="math inline">\(\pi_i\)</span> 表示：<span
+class="math inline">\([0,i]\)</span>
+这个区间内的字符串，<strong>相等的真前缀与真后缀的最大长度。</strong>
+就比方说aba这个字符串，前缀函数的值就应该是1，也就是真前缀a与真后缀a相等，注意这里的
+<strong>真前缀</strong> 与 <strong>真后缀</strong>
+，是除去原串之外的前缀与后缀。</p>
+<h3 id="计算">计算</h3>
+<p>如果要嗯算的话，很明显就是枚举i，并且枚举长度，这是 <span
+class="math inline">\(O(n^2)\)</span>
+复杂度，还要挨个字符比较前缀和后缀，就是 <span
+class="math inline">\(O(n^3)\)</span> 复杂度，复杂度要飞了。</p>
+<p>所以不能硬算，最理想的状态当然是我从头到尾扫一遍啥都能出来，也就是
+<span class="math inline">\(O(n)\)</span> 复杂度，幸运的是确实可行。</p>
+<p>思考前缀函数 <span class="math inline">\(\pi_i\)</span> 与 <span
+class="math inline">\(\pi_{i + 1}\)</span> 是否有关系</p>
+<p>假设我们已经处理好了 <span class="math inline">\(\pi_i = len\)</span>
+，新加入一个字符x，最理想的状态是x与 <span
+class="math inline">\(s[len]\)</span> 相等，那我们就可以直接算出 <span
+class="math inline">\(\pi_{i + 1} = len + 1\)</span>
+(注意此处我们规定字符串s的下标从零开始，下标为len也就是当前最长符合要求的前缀的后一位)。我们可能会想会不会出现大于这个值的情况，显然是不可能的，因为我们每次只加入一个字符，如果i+1这个点的值比i大2，就意味着前面还有一位符合要求，但很显然，如果这一位符合要求，那么
+<span class="math inline">\(\pi_i\)</span> 中一定包含了这一位，就意味着
+<span class="math inline">\(\pi_i\)</span>
+也得+1，这是矛盾的，因为i前面都已经处理好了。</p>
+<p>那么只需要考虑x不等于 <span class="math inline">\(s[len]\)</span>
+的情况，用具体的例子更容易理解，比如12341231这个字符串，假设我们已经枚举到最后一位，此时前面的都已经处理完了，第7位的前缀函数值应该是3，也就是
+<strong>【123】</strong> 4 <strong>【123】</strong> 1
+，框起来的两块相等，是最长的符合要求的真前缀与真后缀。当我们枚举到1时，发现1与4不相等，这时该怎么办呢，我们应该考虑将两头往两边“缩”，就像这样
+<strong>【123&lt;-】</strong> 4 <strong>【-&gt;123】</strong>
+1，也就是试图寻找次长的相等真前缀与真后缀。一位一位挪太没效率了，当我们挪了之后发现，有一些情况是显然不行的，如果我们挪成
+【12】341【23】1，12和23就不相等，根本轮不到比较最后面那一位。因此我们意识到，下一个有价值的状态一定是前缀与后缀相等的状态，转换一下思路，因为前后相等，我们只需要找【123】的最大相等真前缀真后缀即可，也就是考虑
+<span class="math inline">\(len = \pi [\pi [i] -
+1]\)</span>，似乎往回跳也会影响复杂度，但它依然是线性复杂度，因为这个“缩”的次数是有限的。</p>
+<p>实现代码如下 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">Prime_Function</span><span class="params">()</span></span>&#123;</span><br><span class="line">    ll p = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(ll i = <span class="number">1</span>; i &lt; len; i++)&#123;</span><br><span class="line">        p = pi[i - <span class="number">1</span>];</span><br><span class="line">        <span class="keyword">while</span>(str[i] != str[p] &amp;&amp; p &gt; <span class="number">0</span>)&#123;</span><br><span class="line">            p = pi[p - <span class="number">1</span>];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(str[i] == str[p])p++;</span><br><span class="line">        pi[i] = p;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h1 id="manacher">Manacher</h1>
+<p>显然manacher是个人名，但是“马拉车”这个谐音也的确有些许形象，因为想到车就有一种线性的直观感受，<del>像个车一样往前走，就可以把沿途都算完了</del>。</p>
+<p>这个manacher是用来算回文的，我们想想，如果要暴力地算一个字符串的所有回文子串，复杂度是多少，跟上面那个暴力算法大差不差，枚举中心点，枚举长度。至少是
+<span class="math inline">\(O(n^2)\)</span> 级别的，劣质之极。</p>
+<p>manacher算法可以在 <span class="math inline">\(O(n)\)</span>
+复杂度内算以每一个点为中心的最长回文串的长度，但它只能计算奇数长度的回文串，那么偶数长度的怎么办呢，只需要在每两个字符之间穿插一个原串绝对不包含的特殊字符比如*即可。</p>
+<p>manacher算法比暴力算法多维护了两个值，当前所有回文串的最右边的端点r以及它对应的中心位置mid。</p>
+<p>当我们枚举到i这个点时，考虑两种情况：i在r左边以及i在r右边。</p>
+<p>当前维护的mid以及r，就像是什么灯塔一样，在r之前，我们视作已知区域，为什么呢，在mid之前倒好说，我们都算过了，在mid和r这个区域内似乎我们还不一定算过，但如果我们把这个mid当作对称轴，显然左边和右边是相等的，这就是
+<strong>已知区域</strong> 了。在r之后的我们视作 <strong>阴影</strong>
+，是未知区域。</p>
+<p>如果这个i在r之后，我们老老实实地用朴素算法，<del>向黑暗中探索</del>
+。没什么好说的，记得更新mid和r就行。</p>
+<p>重点讨论i在r之前的情况，我们首先找到i关于mid的对称点j。以j为中心的最长回文串已经得到了，我们把这个回文串对称回来，如果刚好这个长度没有伸到阴影中，则开开心心地得到了这个i点的答案，i点的答案就是j点的答案。如果这个长度太长了，对称回来之后已经伸到阴影里了，就不能草率地决定i点的答案，但我们可以知道i点的答案至少是i到r的长度，我们尝试往外“探索”，用朴素算法一位一位往外挪，此时注意更新mid和r。</p>
+<p>复杂度分析很简单，我们每次只需要在往外探索的时候调用朴素算法，最多调用n次（字符串长度），也就是
+<span class="math inline">\(O(n)\)</span> 级别的。</p>
+<p>实现代码如下,有一部分在主函数里面，我就全放上来了</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//manacher算法</span></span><br><span class="line"><span class="comment">//洛谷P3805</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> MAXN 11000010</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="keyword">using</span> ll = <span class="type">long</span> <span class="type">long</span>;</span><br><span class="line"><span class="type">char</span> str[<span class="number">2</span> * MAXN];</span><br><span class="line"><span class="type">char</span> Pre_str[MAXN];</span><br><span class="line">ll Max_d[<span class="number">2</span> * MAXN];<span class="comment">//这个Max_d是指除中心点之外的最大回文串半径</span></span><br><span class="line">ll len;</span><br><span class="line"><span class="comment">//用于往外扩张</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">spread</span><span class="params">(ll stat_len,ll mid, ll &amp;maxr, ll &amp;nowmid)</span></span>&#123;</span><br><span class="line">    Max_d[mid] = stat_len - <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">if</span>(mid &gt; maxr)&#123;</span><br><span class="line">        nowmid = maxr = mid;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">while</span>(stat_len + mid &lt; len &amp;&amp; mid - stat_len &gt;= <span class="number">0</span>)&#123;</span><br><span class="line">        <span class="keyword">if</span>(str[mid - stat_len] == str[mid + stat_len])&#123;</span><br><span class="line">            nowmid = mid;</span><br><span class="line">            maxr = <span class="built_in">max</span>(maxr,mid + stat_len);</span><br><span class="line">            Max_d[mid] = stat_len;</span><br><span class="line">        &#125;<span class="keyword">else</span> <span class="keyword">break</span>;</span><br><span class="line">        stat_len++;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%s&quot;</span>,Pre_str);</span><br><span class="line">    len = <span class="built_in">strlen</span>(Pre_str);</span><br><span class="line">    <span class="keyword">for</span>(ll i = <span class="number">0</span>; i &lt; len; i++)&#123;</span><br><span class="line">        str[<span class="number">2</span> * i] = Pre_str[i];</span><br><span class="line">        <span class="keyword">if</span>(i &lt; len - <span class="number">1</span>)str[<span class="number">2</span> * i + <span class="number">1</span>] = <span class="string">&#x27;#&#x27;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    len = <span class="number">2</span> * len - <span class="number">1</span>;</span><br><span class="line">    <span class="comment">//以下是manacher算法</span></span><br><span class="line">    <span class="keyword">for</span>(ll i = <span class="number">0</span>; i &lt; len; i++)&#123;</span><br><span class="line">        Max_d[i] = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    ll Max_r = <span class="number">0</span>;</span><br><span class="line">    ll now_Mid = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(ll i = <span class="number">1</span>; i &lt; len; i++)&#123;</span><br><span class="line">        <span class="keyword">if</span>(i &gt; Max_r)&#123;<span class="comment">//如果在已知区域之外则扩张</span></span><br><span class="line">            <span class="built_in">spread</span>(<span class="number">1</span>,i,Max_r,now_Mid);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span>&#123;</span><br><span class="line">            <span class="keyword">if</span>(i + Max_d[<span class="number">2</span> * now_Mid - i] &lt; Max_r)&#123;</span><br><span class="line">                <span class="comment">//在区域内，直接赋值</span></span><br><span class="line">                Max_d[i] = Max_d[<span class="number">2</span> * now_Mid - i];</span><br><span class="line">                <span class="keyword">continue</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span>&#123;<span class="comment">//如果已经伸出了已知区域也要考虑扩张</span></span><br><span class="line">            <span class="comment">//注意与上面那个的扩张相比</span></span><br><span class="line">            <span class="comment">//这次的起点长度不同，因为至少是Max_r - i</span></span><br><span class="line">                <span class="built_in">spread</span>(Max_r - i,i,Max_r,now_Mid);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    ll ans = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(ll i = <span class="number">0</span>; i &lt; len; i++)&#123;</span><br><span class="line">        <span class="keyword">if</span>(str[i] == <span class="string">&#x27;#&#x27;</span>)&#123;</span><br><span class="line">            ans = <span class="built_in">max</span>(ans,<span class="number">2</span> * ((Max_d[i] + <span class="number">1</span>) / <span class="number">2</span>));</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            ans = <span class="built_in">max</span>(ans,<span class="number">1</span> + <span class="number">2</span> * (Max_d[i] / <span class="number">2</span>));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%lld\n&quot;</span>,ans);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2023/08/01/%E6%96%9C%E7%8E%87%E4%BC%98%E5%8C%96dp/" rel="prev" title="斜率优化dp">
+      <i class="fa fa-chevron-left"></i> 斜率优化dp
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2023/08/08/%E5%AD%97%E5%85%B8%E6%A0%91%EF%BC%8CKMP%EF%BC%8CAC%E8%87%AA%E5%8A%A8%E6%9C%BA/" rel="next" title="字典树，KMP，AC自动机">
+      字典树，KMP，AC自动机 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%93%88%E5%B8%8C"><span class="nav-number">1.</span> <span class="nav-text">字符串哈希</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E7%BC%80%E5%87%BD%E6%95%B0"><span class="nav-number">2.</span> <span class="nav-text">前缀函数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9A%E4%B9%89"><span class="nav-number">2.0.1.</span> <span class="nav-text">定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%A1%E7%AE%97"><span class="nav-number">2.0.2.</span> <span class="nav-text">计算</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#manacher"><span class="nav-number">3.</span> <span class="nav-text">Manacher</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="爱斯基摩咸鱼"
+      src="/images/ikklo.jpg">
+  <p class="site-author-name" itemprop="name">爱斯基摩咸鱼</p>
+  <div class="site-description" itemprop="description">路漫漫其修远兮，吾将上下而求索</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">12</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">爱斯基摩咸鱼</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -28,7 +28,7 @@
 <meta property="og:description" content="前言 这也是教程第一部分的末尾，前面的笔记我还没有补www 粒子特效 特效这方面，很显然很难使用某个贴图完成，所以我们引入 粒子系统 这个概念，它是 计算机图形学中模拟一些特定的模糊现象的技术 ， 通俗一点说，它是用来模拟现实中一些抽象视觉效果的，比如烟、火、雾等等（稍微想想就能理解，使用粒子效果来表现这些画面会更有真实感）。而武器的特效，正好也适合用这种方式表现，TR中就带有实现这种">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2023-02-03T07:30:25.000Z">
-<meta property="article:modified_time" content="2023-02-20T15:36:53.891Z">
+<meta property="article:modified_time" content="2023-10-20T07:24:38.920Z">
 <meta property="article:author" content="爱斯基摩咸鱼">
 <meta property="article:tag" content="C#">
 <meta property="article:tag" content="Terraria">
@@ -131,7 +131,7 @@
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">11</span></a>
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">12</span></a>
 
   </li>
   </ul>
@@ -192,7 +192,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-02-20 23:36:53" itemprop="dateModified" datetime="2023-02-20T23:36:53+08:00">2023-02-20</time>
+                <time title="修改时间：2023-10-20 15:24:38" itemprop="dateModified" datetime="2023-10-20T15:24:38+08:00">2023-10-20</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -225,10 +225,45 @@
 <p>首先要了解的是这个函数 <figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">override</span> <span class="keyword">void</span> <span class="title">MeleeEffects</span>(<span class="params">Player player, Rectangle hitbox</span>)</span>&#123;</span><br><span class="line">	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>MeleeEffects会在近战武器挥动的时候触发，第一个参数是玩家，第二个参数是物品挥动的时候的判定区域。如果要添加粒子特效，应该使用Dust.NewDustDirect这个函数
 <figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Dust <span class="title">NewDustDirect</span>(<span class="params">Vector2 Position, <span class="built_in">int</span> Width, <span class="built_in">int</span> Height, <span class="built_in">int</span> Type, <span class="built_in">float</span> SpeedX = <span class="number">0</span>, <span class="built_in">float</span> SpeedY = <span class="number">0</span>, <span class="built_in">int</span> Alpha = <span class="number">0</span>, Color newColor = <span class="literal">default</span>, <span class="built_in">float</span> Scale = <span class="number">1</span></span>)</span>;</span><br></pre></td></tr></table></figure></p>
-<p>非常长的一个函数，接下来我们来了解一下这些参数 |参数|含义|
-|:---|:---| |Position|释放的初始位置| |Width/Height|粒子释放区域的宽/高|
-|Type|粒子的ID| |SpeedX/SpeedY|粒子速度的X/Y分量| |Alpha|粒子透明度|
-|newColor|把粒子染成什么颜色| |Scale|粒子的缩放倍数|</p>
+<p>非常长的一个函数，接下来我们来了解一下这些参数</p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">参数</th>
+<th style="text-align: left;">含义</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Position</td>
+<td style="text-align: left;">释放的初始位置</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Width/Height</td>
+<td style="text-align: left;">粒子释放区域的宽/高</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Type</td>
+<td style="text-align: left;">粒子的ID</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">SpeedX/SpeedY</td>
+<td style="text-align: left;">粒子速度的X/Y分量</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Alpha</td>
+<td style="text-align: left;">粒子透明度</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">newColor</td>
+<td style="text-align: left;">把粒子染成什么颜色</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Scale</td>
+<td style="text-align: left;">粒子的缩放倍数</td>
+</tr>
+</tbody>
+</table>
 <p>具体的使用方法看实例 <figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">override</span> <span class="keyword">void</span> <span class="title">MeleeEffects</span>(<span class="params">Player player, Rectangle hitbox</span>)</span> &#123;</span><br><span class="line">    <span class="comment">// 在武器的挥动判定区域添加一些火焰粒子特效</span></span><br><span class="line">    Dust.NewDustDirect(hitbox.TopLeft(), hitbox.Width, hitbox.Height,</span><br><span class="line">        MyDustId.Fire, <span class="number">0</span>, <span class="number">0</span>, <span class="number">100</span>, Color.White, <span class="number">2f</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 而且这东西是有返回值的，也就是NewDustDirect生成的是一个Dust实例，Dust也有不少属性可以设置，可以灵活使用这些属性达到不同的效果。由于这个函数是在Dust类下而且不依赖外层函数传参，所以可以在其他函数使用，当成一个特效生成器就行了。</p>
 <h2 id="其他重写函数">其他重写函数</h2>
@@ -370,7 +405,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">11</span>
+          <span class="site-state-item-count">12</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
