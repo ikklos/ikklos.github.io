@@ -117,7 +117,7 @@
   </li>
         <li class="menu-item menu-item-tags">
 
-    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">6</span></a>
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">7</span></a>
 
   </li>
         <li class="menu-item menu-item-categories">
@@ -127,7 +127,7 @@
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">12</span></a>
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">13</span></a>
 
   </li>
   </ul>
@@ -153,6 +153,147 @@
 
           <div class="content index posts-expand">
             
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://ikklos.github.io/2023/10/26/%E6%8B%93%E6%89%91%E6%8E%92%E5%BA%8F%E4%B8%8E%E6%9C%80%E7%9F%AD%E8%B7%AF/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/ikklo.jpg">
+      <meta itemprop="name" content="爱斯基摩咸鱼">
+      <meta itemprop="description" content="路漫漫其修远兮，吾将上下而求索">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="爱斯基摩咸鱼历险记">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2023/10/26/%E6%8B%93%E6%89%91%E6%8E%92%E5%BA%8F%E4%B8%8E%E6%9C%80%E7%9F%AD%E8%B7%AF/" class="post-title-link" itemprop="url">拓扑排序与最短路</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2023-10-26 13:46:33 / 修改时间：18:10:17" itemprop="dateCreated datePublished" datetime="2023-10-26T13:46:33+08:00">2023-10-26</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%AE%97%E6%B3%95%E7%AB%9E%E8%B5%9B/" itemprop="url" rel="index"><span itemprop="name">算法竞赛</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="拓扑排序和最短路">拓扑排序和最短路</h1>
+<h2 id="拓扑序">拓扑序</h2>
+<p>通常，做某些事需要若干前置条件，比如选修课程、软件安装等等，这时候我们就需要知晓做这些事的顺序，帮助我们明确这个顺序的就是拓扑序</p>
+<p><del>我的语言表述可能太抽象了</del>，让我们来看一个具体例子</p>
+<img src="/2023/10/26/%E6%8B%93%E6%89%91%E6%8E%92%E5%BA%8F%E4%B8%8E%E6%9C%80%E7%9F%AD%E8%B7%AF/%E6%8B%93%E6%89%91%E5%BA%8F1.jpg" class="" title="拓扑序">
+<p>其中<strong>打游戏</strong>-&gt;<strong>学习</strong>的一条边意味着“如果我要学习，那我必须先打游戏”，那么我可能的执行顺序是什么呢？其中一种可能的顺序就是打游戏-&gt;吃饭-&gt;学习-&gt;洗衣服-&gt;睡觉。拓扑序正是帮助我们求这个的过程。实际上很容易理解，如果我们事先学习了集合论中的<em>偏序关系</em>概念，能帮助我们更好地理解这个东西的意义。<strong>注意，只有有向无环图(DAG)存在拓扑序。</strong></p>
+<p>其代码相当简单，我们只需要用一个队列来维护</p>
+<ol type="1">
+<li>记录每一个节点的<strong>入度</strong>，然后先刷一遍所有的节点，如果入度为零，那么入队</li>
+<li>每一步取出队头元素，遍历以它为起点的边，删掉</li>
+<li>如果一个点的入度在这个过程中减少到0，把它入队</li>
+<li>如果队空，结束</li>
+</ol>
+<p>上述过程中，出队的顺序即为拓扑序。</p>
+<p>这个东西有什么用？用处相当大，<del>拓扑序救我狗命</del>，但我罗列不出来，上道例题先</p>
+<blockquote>
+<p>最经典的一道题，食物链</p>
+<p>给定食物网上的捕食关系，求最大的食物链条数。</p>
+</blockquote>
+<p>声明一个数组f[n]，表示以节点n结尾的最大食物链条数，显然f[n]有一种“继承”性质，也就是f[n]一定可以由前驱节点的f求得，那么按拓扑序更新，就可以保证在更新n节点时，前驱节点一定更新过。</p>
+<h2 id="最短路">最短路</h2>
+<p>大体上我们解决的最短路问题，也就分为以下几种</p>
+<ul>
+<li>任意两点间的最短路 -- <span
+class="math inline">\(floyd\)</span></li>
+<li>单源最短路 -- <span class="math inline">\(spfa\)</span>，<span
+class="math inline">\(djkstra\)</span></li>
+<li>还有其他的，但是我们先解决典型问题</li>
+</ul>
+<h3 id="弗洛伊德">弗洛伊德</h3>
+<p><strong>弗洛伊德（我音译的，不一定叫这个名字）</strong>算法的核心是一种<span
+class="math inline">\(dp\)</span>思想，它开了一个三维数组（可以将其降为二维）<span
+class="math inline">\(dp[i][u][v]\)</span>
+表示<strong>只考虑前i个点，u到v的最短路径长度</strong>，显然有转移方程
+<span class="math display">\[
+dp[i][u][v] = min(dp[i-1][u][v],dp[i-1][u][i]+dp[i-1][v])
+\]</span> 可以在<span
+class="math inline">\(O(n^3)\)</span>的时间内求出，代码也相当简单，但在此之前</p>
+<img src="/2023/10/26/%E6%8B%93%E6%89%91%E6%8E%92%E5%BA%8F%E4%B8%8E%E6%9C%80%E7%9F%AD%E8%B7%AF/floyd.jpg" class="" title="floyd">
+<p>我们并不需要真的开一个三维数组，因为如果我们按照u和v递增的顺序更新这个二维数组，<span
+class="math inline">\(dp[u][i]\)</span>和<span
+class="math inline">\(dp[i][v]\)</span>是还未更新的，也就是它们依然属于i-1，这样更新是不会出错的。</p>
+<p>代码如下</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(<span class="type">long</span> <span class="type">long</span> k = <span class="number">1</span>; k &lt;= n; k++)&#123;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">long</span> <span class="type">long</span> i = <span class="number">1</span>; i &lt;= n; i++)&#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">long</span> <span class="type">long</span> j = <span class="number">1</span>; j &lt;= n; j++)&#123;</span><br><span class="line">            dp[i][j] = <span class="built_in">min</span>(dp[i][j],dp[i][k]+dp[k][j]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>确实相当简单</p>
+<h3 id="spfa">spfa</h3>
+<p>spfa是一个单源最短路算法，它可以<strong>判负环，计算带负权图的最短路</strong>，其他的时候</p>
+<img src="/2023/10/26/%E6%8B%93%E6%89%91%E6%8E%92%E5%BA%8F%E4%B8%8E%E6%9C%80%E7%9F%AD%E8%B7%AF/spfa%E5%B7%B2%E6%AD%BB.jpg" class="" title="spfa已死">
+<p>它似了，spfa的复杂度是可以<del>轻松</del>被卡的，如果出题人有心卡spfa，它就敢似给你看，虽然很多情况依然需要用，但它的复杂度并不非常可靠</p>
+<p>spfa的这个核心思想就是”松弛思想“，所谓松弛就是，如果u到v中间有一个节点k，使得选择u到k再从k到v的路径长度小于u到v现有的路径长度，那么就更新u到v的最短路长度。贝尔曼福德算法也使用松弛思想，它是比较朴素的，也就是对于每一个点，都试图对每一条边进行松弛，也就是<span
+class="math inline">\(O(nm)\)</span>的</p>
+<p>队列优化的贝尔曼福德就是spfa算法，可以证明的是，只有在这一轮中被松弛的点，才有可能松弛其他点，代码类似bfs，但vis数组记录点是否在队列内，为了防止重复入队，大部分时候它的速度还是很优秀的，但注意其最差情况还是<span
+class="math inline">\(O(nm)\)</span>。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">inline</span> <span class="type">bool</span> <span class="title">spfa</span><span class="params">(<span class="type">int</span> s)</span></span>&#123;<span class="comment">//它可以判负环，芜湖</span></span><br><span class="line">    queue&lt;<span class="type">int</span>&gt; q;</span><br><span class="line">    dis[s] = <span class="number">0</span>;</span><br><span class="line">    q.<span class="built_in">push</span>(s);vis[s] = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">while</span>(!q.<span class="built_in">empty</span>())&#123;</span><br><span class="line">        <span class="type">int</span> x = q.<span class="built_in">front</span>();</span><br><span class="line">        q.<span class="built_in">pop</span>();vis[x] = <span class="number">0</span>;<span class="comment">//出队后记得标记其不在队中</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">auto</span> eg:e[x])&#123;</span><br><span class="line">            <span class="keyword">if</span>(dis[eg.end] &gt; dis[x] + eg.w)&#123;</span><br><span class="line">                dis[eg.end] = dis[x] + eg.w;</span><br><span class="line">                cnt[eg.end]++;</span><br><span class="line">                <span class="keyword">if</span>(cnt[eg.end] &gt; n)<span class="keyword">return</span> <span class="literal">false</span>;<span class="comment">//如果一个点被松弛超过n次，就说明有负环</span></span><br><span class="line">                <span class="keyword">if</span>(!vis[eg.end])&#123;</span><br><span class="line">                    q.<span class="built_in">push</span>(eg.end);vis[eg.end] = <span class="number">1</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="dijkstra">dijkstra</h3>
+<p>那么我们的救星在哪呢，dj就是一个可以优化到<span
+class="math inline">\(O(mlogm)\)</span>的算法，它的核心是贪心思想，当然也用了松弛思想。dij把所有的点分成两个集合，A集合是已经确定最短路的点的集合，B集合是还未确定最短路的点的集合。每次寻找B集合中，dis值最小（离A集合最近）的点，进行松弛操作。</p>
+<p>在非负权图中，我们可以证明：B集合中dis值最小的点，不可能再被其他点松弛。所以它可以直接放入A集合，然后用它来松弛其他的点。这样理论上我们只需要把每条边遍历一次即可，但维护这个”最小“要耗费时间，于是</p>
+<h3 id="优先队列优化dij">优先队列优化dij</h3>
+<p>C++中的STL有priority_queue这个容器，本质上是一个大根堆，但我们可以把它变成小根堆，加个负号就行了(或者写个比较函数)。那么我们dij的思路就是</p>
+<ol type="1">
+<li>把起点放到队中，dis[s] = 0</li>
+<li>循环从队中取出队首u，如果已经在A集合，直接continue，否则标记在A集合，遍历u的每一条边，对于每一个终点v，检查<span
+class="math inline">\(if(dis[v] &gt;
+dis[u]+w_{uv})\)</span>如果可松弛，则松弛节点并把v入队</li>
+<li>队空则结束，最后每一个点的dis值就是最短路长度。</li>
+</ol>
+<p>注意，在带负权图中，它并不适用，因为<strong>“B集合中dis值最小的点，不可能再被其他点松弛”</strong>并不在带负权图中成立。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">dij</span><span class="params">(<span class="type">int</span> k)</span></span>&#123;</span><br><span class="line">    priority_queue&lt;edge&gt; q;<span class="comment">//edge是一个pair，first表示边权，second表示终点</span></span><br><span class="line">    q.<span class="built_in">push</span>(&#123;<span class="number">0</span>,k&#125;);</span><br><span class="line">    dis[k] = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span>(!q.<span class="built_in">empty</span>())&#123;</span><br><span class="line">        id = q.<span class="built_in">top</span>().second;</span><br><span class="line">        q.<span class="built_in">pop</span>();</span><br><span class="line">        <span class="keyword">if</span>(vis[id])<span class="keyword">continue</span>;</span><br><span class="line">        vis[id] = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">auto</span> x: edges[id])&#123;</span><br><span class="line">            y = x.second;</span><br><span class="line">            <span class="keyword">if</span>(dis[id] + x.first &lt; dis[y])&#123;</span><br><span class="line">                dis[y] = dis[id] + x.first;</span><br><span class="line">                q.<span class="built_in">push</span>(&#123;-dis[y],y&#125;);<span class="comment">//注意这里加负号，因为优先队列默认是大根堆，但我们需要dis最小的点</span></span><br><span class="line">            &#125;</span><br><span class="line">            </span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>有一道相当经典的例题，可以帮我们打开思维，它的大体表述如下</p>
+<blockquote>
+<p>给定一个图，把这个图的点划分为两个集合，求A集合中的点到B集合中的点的最小距离</p>
+</blockquote>
+<p>看起来好像有点棘手，因为无论是前面讲的全源最短路(floyd)还是单源最短路，都似乎无法很好的对应这种情况，但我们只需要做一步构造：加一个超级源点P和一个超级终点Q，对于A中的每一个点，都从P连一个边权为0的边，对于B中的每一个点，都向Q连一个边权为0的边，那么我们只需要从P开始跑单源最短路就行了，然后dis[Q]就是答案。这样似乎我们能解决的问题范围又扩大了。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
       
   
   
@@ -268,7 +409,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-10-20 15:32:54" itemprop="dateModified" datetime="2023-10-20T15:32:54+08:00">2023-10-20</time>
+                <time title="修改时间：2023-10-20 15:38:26" itemprop="dateModified" datetime="2023-10-20T15:38:26+08:00">2023-10-20</time>
               </span>
 
           
@@ -1775,141 +1916,11 @@ target="_blank" rel="noopener" href="https://terraria-zh.gamepedia.com/%E5%A2%9E
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://ikklos.github.io/2023/02/01/%E3%80%90tr%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91%E9%A5%B0%E5%93%81%E5%92%8C%E7%BF%85%E8%86%80/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/ikklo.jpg">
-      <meta itemprop="name" content="爱斯基摩咸鱼">
-      <meta itemprop="description" content="路漫漫其修远兮，吾将上下而求索">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="爱斯基摩咸鱼历险记">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2023/02/01/%E3%80%90tr%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91%E9%A5%B0%E5%93%81%E5%92%8C%E7%BF%85%E8%86%80/" class="post-title-link" itemprop="url">【tr学习笔记】饰品和翅膀</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2023-02-01 12:17:21" itemprop="dateCreated datePublished" datetime="2023-02-01T12:17:21+08:00">2023-02-01</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-02-20 23:37:00" itemprop="dateModified" datetime="2023-02-20T23:37:00+08:00">2023-02-20</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/TRmod%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">TRmod学习笔记</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="一贴图">一、贴图</h2>
-<p><strong>贴图文件格式为.png</strong>
-，贴图的名字要和.cs文件的名字相同。此规则同样适用于武器等其他贴图。但是要注意的一点是，一般原版武器的贴图中，近战武器是呈45°角从左下到右上的</p>
-<h2 id="二属性">二、属性</h2>
-<p>每一个确定的模组物品是一个 <strong>派生类</strong> ，需要从
-<strong>基类</strong> 中继承一些特性</p>
-<p>所以首先需要 <figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//继承类</span></span><br><span class="line"><span class="keyword">class</span> &lt;饰品名称&gt; : <span class="title">ModItem</span>&#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-(ps:此时或许会需要使用新的命名空间，直接根据vs的提示添加即可) 接下来通过
-<strong>重写函数</strong> 来给饰品添加基础特性，大体来说需要三个函数 *
-SetStaticDefaults - 写物品名字以及介绍之类的信息 * SetDefaults -
-写一些基础属性 * AddRecipes - 把物品添加进合成表（写合成方式 ###
-SetStaticDefaults 目前阶段最常用的是
-<strong>DisplayName(显示名称)</strong> 与
-<strong>Tooltip(提示文本)</strong> ，它们都是ModItem的成员。</p>
-<p>下面的代码用于设定饰品名称 <figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">DisplayName.SetDefault(<span class="string">&quot;&lt;饰品名字&gt;&quot;</span>);</span><br></pre></td></tr></table></figure>
-下面的代码用于设定提示文本(提示框) <figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Tooltip.SetDefault(<span class="string">&quot;这是一个饰品&quot;</span>);</span><br></pre></td></tr></table></figure> ### SetDefaults
-这个函数用来设定一些基础属性，对于饰品来讲一定要加入一句 <figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">item.accessory = <span class="literal">true</span>;</span><br></pre></td></tr></table></figure>
-其中Item也是ModItem的一个成员，其他的属性设置比较公式化 <figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//物品的大小</span></span><br><span class="line">item.width = <span class="number">22</span>;</span><br><span class="line">item.height = <span class="number">22</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">//判断物品是否为一个饰品，可以理解为是否可穿戴</span></span><br><span class="line">item.accessory = <span class="literal">true</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">//防御</span></span><br><span class="line">item.defense = <span class="number">16</span>;</span><br><span class="line"></span><br><span class="line">item.rare = <span class="number">8</span>;</span><br><span class="line">item.<span class="keyword">value</span> = Item.sellPrice(<span class="number">0</span>,<span class="number">5</span>,<span class="number">0</span>,<span class="number">0</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">//专家模式专有物品可以将这个值设置为true，名称会变成彩虹色</span></span><br><span class="line">item.expert = <span class="literal">true</span>;</span><br></pre></td></tr></table></figure>
-在SetDefaults函数内能做到的事基本也就是这些了，但是可以通过重写函数
-<strong>UpdateAccessory</strong>
-来添加其他更高级的属性,需要注意的一点是，这个函数会在每帧执行一次
-<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">override</span> <span class="keyword">void</span> <span class="title">UpdateAccessory</span>(<span class="params">Player player, <span class="built_in">bool</span> hideVisual</span>)</span>&#123;</span><br><span class="line">	player.statLifeMax2 += <span class="number">100</span>;</span><br><span class="line">	player.statManaMax2 += <span class="number">100</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-上面的例子中把玩家的魔法值和生命值上限各加了100，还有其他各种属性大概根据英语翻译就可以知道用途，但是需要注意的是statLifeMax与statLifeMax2的区别：前者是基准值，后者会每帧刷新，也就是说，如果在上述代码中写了statLifeMax
-+= 100，后果就是玩家的生命值上限每帧都会加100。 ## 三、翅膀 ### 贴图
-翅膀的贴图比较特殊，需要两个贴图，一个是物品贴图，一个是帧图，因为要让翅膀动起来。
-### 翅膀的源码文件 基本的代码是与上文相同的，接下来只说不同点
-<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> System;</span><br><span class="line"><span class="keyword">using</span> System.Collections.Generic;</span><br><span class="line"><span class="keyword">using</span> System.Linq;</span><br><span class="line"><span class="keyword">using</span> System.Text;</span><br><span class="line"><span class="keyword">using</span> System.Threading.Tasks;</span><br><span class="line"><span class="keyword">using</span> Terraria;</span><br><span class="line"><span class="keyword">using</span> Terraria.ModLoader;</span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> <span class="title">ExampleMod.Content.Items.Accessories</span></span><br><span class="line">&#123;</span><br><span class="line">	[<span class="meta">AutoloadEquip(EquipType.Wings)</span>]</span><br><span class="line">	<span class="keyword">internal</span> <span class="keyword">class</span> <span class="title">Mywing</span> : <span class="title">ModItem</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">override</span> <span class="keyword">void</span> <span class="title">SetDefaults</span>()</span> &#123;</span><br><span class="line"></span><br><span class="line">		&#125;</span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">override</span> <span class="keyword">void</span> <span class="title">SetStaticDefaults</span>()</span> &#123;</span><br><span class="line"></span><br><span class="line">		&#125;</span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">override</span> <span class="keyword">void</span> <span class="title">UpdateAccessory</span>(<span class="params">Player player, <span class="built_in">bool</span> hideVisual</span>)</span> &#123;</span><br><span class="line">			</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">override</span> <span class="keyword">void</span> <span class="title">AddRecipes</span>()</span> &#123;</span><br><span class="line">			</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure> 最主要的不同点是这个 <figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[<span class="meta">AutoloadEquip(EquipType.Wings)</span>]</span><br></pre></td></tr></table></figure>
-根据字面意思大体能猜出这是个啥，在C#中这是Attribute，目前先不用深入理解，而且在1.4的Example
-mod中其实还有一块代码 <figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">override</span> <span class="built_in">bool</span> <span class="title">IsLoadingEnabled</span>(<span class="params">Mod mod</span>)</span> &#123;</span><br><span class="line">	<span class="keyword">return</span> ModContent.GetInstance&lt;ExampleModConfig&gt;().ExampleWingsToggle;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-但目前为止还不知道它的具体作用，似乎需要在ModConfig中设置一些东西。<strong>SetDefaults</strong>
-中的设置也是中规中矩，但是在 <strong>UpdateAccessory</strong>
-中有一些必须设定的值 <figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">override</span> <span class="keyword">void</span> <span class="title">UpdateAccessory</span>(<span class="params">Player player, <span class="built_in">bool</span> hideVisual</span>)</span> &#123;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 翅膀的最长持续时间</span></span><br><span class="line"></span><br><span class="line">player.wingTimeMax = <span class="number">180</span>;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-原版日耀翅膀的设置是180，根据此为基准自行调整。另外
-<strong>wingTime</strong>
-是每一帧更新的，如果降到0则飞行时间耗尽。也就是如果写成这样
-<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">player.wingTime = player.wingTimeMax;</span><br></pre></td></tr></table></figure> 就可以让人物一直飞</p>
-<p>翅膀的飞行参数需要用到两个钩子 * VerticalWingSpeeds *
-HorizontalWingSpeeds</p>
-<p>这两个钩子的参数很多，直接复制教程的代码 <figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 控制翅膀垂直飞行的参数</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">override</span> <span class="keyword">void</span> <span class="title">VerticalWingSpeeds</span>(<span class="params">Player player, <span class="keyword">ref</span> <span class="built_in">float</span> ascentWhenFalling, <span class="keyword">ref</span> <span class="built_in">float</span> ascentWhenRising, <span class="keyword">ref</span> <span class="built_in">float</span> maxCanAscendMultiplier, <span class="keyword">ref</span> <span class="built_in">float</span> maxAscentMultiplier, <span class="keyword">ref</span> <span class="built_in">float</span> constantAscend</span>)</span> &#123;</span><br><span class="line">    <span class="comment">// 代码写在这</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 控制翅膀水平飞行的参数</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">override</span> <span class="keyword">void</span> <span class="title">HorizontalWingSpeeds</span>(<span class="params">Player player, <span class="keyword">ref</span> <span class="built_in">float</span> speed, <span class="keyword">ref</span> <span class="built_in">float</span> acceleration</span>)</span> &#123;</span><br><span class="line">    <span class="comment">// 代码写在这</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h4
-id="对于verticalwingspeed这个函数">对于<em>VerticalWingSpeed</em>这个函数</h4>
-<ul>
-<li>ascentWhenFalling是玩家在下落时的爬升率</li>
-<li><strong>ascentWhenRising</strong>同理，是上升时的爬升率</li>
-<li><strong>maxAscentMultiplier</strong>是玩家可以达到的最大爬升率</li>
-<li><strong>maxCanAscendMultiplier</strong>是最大可上升倍增器，一般设置为1，用来倍增第一和第二个属性（<del>或许</del>）</li>
-<li><strong>constantAscend</strong>是正常飞行时的爬升率</li>
-</ul>
-<h4
-id="对于horizontalwingspeeds这个函数">对于<em>HorizontalWingSpeeds</em>这个函数</h4>
-<ul>
-<li><strong>speed</strong>是一直按着方向键能达到的最大速度</li>
-<li><h2
-id="acceleration是加速度"><strong>acceleration</strong>是加速度</h2>
-另外，player还有很多属性可以设置，利用<strong>判断或循环语句</strong>可以实现很多炫酷的功能比如悬浮一类（<del>或许悬浮并不够炫酷</del>），至于如何找到这些属性，可以在vs中<strong>右键Player类</strong>
-然后 <strong>转到定义</strong></li>
-</ul>
-<blockquote>
-<p>Written with <a target="_blank" rel="noopener" href="https://stackedit.cn/">StackEdit中文版</a>.</p>
-</blockquote>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
+  <nav class="pagination">
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+  </nav>
 
 
 
@@ -1976,7 +1987,7 @@ id="acceleration是加速度"><strong>acceleration</strong>是加速度</h2>
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">12</span>
+          <span class="site-state-item-count">13</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1989,7 +2000,7 @@ id="acceleration是加速度"><strong>acceleration</strong>是加速度</h2>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-count">7</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
